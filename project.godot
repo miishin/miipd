@@ -16,7 +16,18 @@ _global_script_class_icons={
 [application]
 
 config/name="miipd"
+run/main_scene="res://assets/scenes/main_menu.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
+window/size/resizable=false
+
+[editor]
+
+script_templates_search_path="res://assets/scripts"
 
 [rendering]
 
