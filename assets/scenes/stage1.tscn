@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/scenes/board.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/scenes/stage1.gd" type="Script" id=2]
+
+[node name="Node2D" instance=ExtResource( 1 )]
+position = Vector2( 640, 0 )
+script = ExtResource( 2 )

@@ -3,7 +3,8 @@
 [ext_resource path="res://assets/scripts/character_select.gd" type="Script" id=1]
 [ext_resource path="res://assets/themes/menu.theme" type="Theme" id=2]
 [ext_resource path="res://assets/scenes/hamster.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/scenes/board.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/scenes/simpleboard.tscn" type="PackedScene" id=4]
+
 
 [node name="CharacterSelect" type="Control"]
 anchor_right = 1.0
