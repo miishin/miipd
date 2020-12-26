@@ -24,8 +24,7 @@ func _move(unit, tile):
 func move_to(tile):
 	position_tile = tile
 
-# in tile.gd
 
-func in_range(other_tile, r):
-	# check if tile is within range <= r
+func in_range(tile_origin, tile_dest, dist):
+	# check if tile is within range <= dist
 	pass
