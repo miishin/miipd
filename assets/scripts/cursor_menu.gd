@@ -4,8 +4,6 @@ var buttons = []
 var current_selection = 0
 
 func _ready():
-	for child in $VBoxContainer.get_children():
-		buttons.append(child)
 	for child in get_children():
 		if child is Button:
 			remove_child(child)
@@ -16,10 +14,13 @@ func _ready():
 	
 	
 func _input(event):
-	if event.is_action_pressed("ui_down") or event.is_action_pressed("ui_up"):
-		var dir = int(Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up"))
-		current_selection = (current_selection + dir + len(buttons)) % len(buttons)
-		_move_cursor()
+	var dir = 0
+	if Input.is_action_just_pressed("ui_down"): 
+		dir += 1
+	if Input.is_action_just_pressed("ui_up"):
+		dir -= 1
+	current_selection = (current_selection + dir + len(buttons)) % len(buttons)
+	_move_cursor()
 	
 
 func _move_cursor():
