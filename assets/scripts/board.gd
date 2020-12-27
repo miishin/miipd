@@ -1,4 +1,5 @@
 extends Node2D
+class_name Board
 
 var units # for showing turn order
 var tiles = []

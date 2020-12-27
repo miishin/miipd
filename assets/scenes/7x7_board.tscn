@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/scripts/7x7_board.gd" type="Script" id=1]
 [ext_resource path="res://assets/scenes/board.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/scenes/cursor_menu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/scenes/unit.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/graphics/sprites/cursor.png" type="Texture" id=5]
+[ext_resource path="res://assets/scenes/hamster.tscn" type="PackedScene" id=6]
 
 [node name="Node2D" instance=ExtResource( 2 )]
 position = Vector2( 640, 0 )
@@ -34,12 +35,15 @@ margin_right = 256.0
 margin_bottom = 52.0
 text = "Stats"
 
-[node name="Hamster" parent="." index="1" instance=ExtResource( 4 )]
-z_index = 1
-
-[node name="Cursor" type="Sprite" parent="." index="2"]
+[node name="Cursor" type="Sprite" parent="." index="1"]
 visible = false
 rotation = 1.56742
 scale = Vector2( 2, 2 )
 z_index = 3
 texture = ExtResource( 5 )
+
+[node name="Hamster" parent="." index="2" instance=ExtResource( 4 )]
+z_index = 1
+
+[node name="Node2D" parent="Hamster" index="1" instance=ExtResource( 6 )]
+[connection signal="button_down" from="Menu/Move" to="." method="_on_move_button_down"]
