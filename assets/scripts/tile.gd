@@ -1,9 +1,11 @@
 extends Node2D
 
+# Position of Tile (on Board)
+var pos
 
-var x
-var y
-
+# Whether units can pass through this tile (impassable tiles will
+# have some barrier unit placed on it).
+var passable
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,6 +13,5 @@ func _ready():
 
 # Place tile at a
 func place(pos_x, pos_y):
-	x = pos_x
-	y = pos_y
+	pos = Vector2(pos_x, pos_y)
 

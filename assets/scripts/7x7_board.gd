@@ -13,19 +13,52 @@ func init():
 	var tile
 	var tile_position
 	for row in range(7):
+		var row_tiles = []
 		for col in range(7):
 			tile = tile_file.instance()
+			tile.place(row, col)
 			tile_position = convert_coordinate(row, col)
 			tile.position = Vector2(tile_position[0], tile_position[1])
-			tiles.append(tile)
+			row_tiles.append(tile)
 			add_child(tile)
+		tiles.append(row_tiles)
 	tile_position = convert_coordinate(0, 0)
 	$Hamster.position = Vector2(tile_position[0], tile_position[1])
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
+# Returns all the positions that are a given distance from a given (x, y) on the Board
+func pathfind(pos, distance):
+	return _pathfind_helper(pos, distance, [])
+	
+func _pathfind_helper(pos, distance, reachable_so_far):
+	if distance == 0:
+		return [pos]
+	var neighbors = _get_neighbors(pos)
+	for tile in neighbors:
+		if not tile in reachable_so_far:
+			reachable_so_far += _pathfind_helper(tile.pos, distance - 1, reachable_so_far)
+	return reachable_so_far 
+	
+# Returns the 4 neighbors (or less if edge tile) of the given (x, y)
+func _get_neighbors(pos):
+	var neighbors = []
+	var x = pos.x
+	var y = pos.y
+	if x == 0:
+		neighbors.append(Vector2(x + 1, y))
+	elif x == len(tiles) - 1:
+		neighbors.append(Vector2(x - 1, y))
+	else:
+		neighbors.append(Vector2(x + 1, y))
+		neighbors.append(Vector2(x - 1, y))
+	if y == 0:
+		neighbors.append(Vector2(x, y + 1))
+	elif y == len(tiles[0]) - 1:
+		neighbors.append(Vector2(x, y - 1))
+	else:
+		neighbors.append(Vector2(x, y + 1))
+		neighbors.append(Vector2(x, y - 1))
+	return neighbors
+	
 func _input(event):
 	if $Menu.is_visible():
 		return
