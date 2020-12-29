@@ -35,3 +35,6 @@ func set_right_neighbor(tile):
 
 func get_neighbors():
 	return [top_neighbor, right_neighbor, bottom_neighbor, left_neighbor]
+	
+func is_passable():
+	return passable

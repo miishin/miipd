@@ -14,8 +14,8 @@ func _ready():
 func fight(other : Unit):
 	other.hp -= (self.atk - other.def)
 
-func move(x, y):
+func move(pos):
 	$Tween.interpolate_property(self, "position",
-		self.position, Vector2(x, y), 1,
+		self.position, pos, 1,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()

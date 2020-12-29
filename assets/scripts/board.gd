@@ -50,7 +50,7 @@ func _pathfinder(tile, distance, seen):
 		return tile
 	var neighbors = tile.get_neighbors()
 	for neighbor in neighbors:
-		if not neighbor in seen:
+		if not neighbor in seen and neighbor.is_passable():
 			seen += _pathfinder(neighbor, distance - 1, seen)
 	return seen
 	

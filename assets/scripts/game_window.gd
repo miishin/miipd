@@ -15,6 +15,7 @@ func _ready():
 
 func init():
 	$Hamster.position = Vector2(0, 150)
+	$Bee.position = convert_coordinate(Vector2(6, 6))
 	
 func _input(event):
 	if $Menu.is_visible():
@@ -22,11 +23,11 @@ func _input(event):
 	if action and event.is_action_pressed("ui_accept"):
 		emit_signal(signal_callback)
 		action = false
-	if moving and event.is_action_pressed("ui_accept"):
+	if action and event.is_action_pressed("ui_accept"):
 		var tile_position = convert_coordinate(Vector2(cursor_pos.x, cursor_pos.y))
 		$Hamster.move(tile_position[0], tile_position[1])
 		unit_pos = cursor_pos
-		moving = false
+		action = false
 		return
 	if event.is_action_pressed("ui_select") and cursor_pos == unit_pos:
 		$Menu.buttons[0].grab_focus()
@@ -87,8 +88,8 @@ func _on_move_button_down():
 	$Menu.hide()
 
 func move():
-	var tile_position = convert_coordinate(cursor_pos.x, cursor_pos.y)
-	$Hamster.move(tile_position[0], tile_position[1])
+	var tile_position = convert_coordinate(cursor_pos)
+	$Hamster.move(tile_position)
 	unit_pos = cursor_pos
 
 func _on_fight_button_down():
