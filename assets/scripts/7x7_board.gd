@@ -3,7 +3,12 @@ extends Board
 var tile_file = preload("res://assets/scenes/tile.tscn")
 var cursor_pos = Vector2(0, 0)
 var unit_pos = Vector2(0, 0)
-var moving : bool
+var bee_pos = Vector2(6, 6)
+var action : bool
+var signal_callback : String
+
+signal move
+signal fight
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,6 +29,8 @@ func init():
 		tiles.append(row_tiles)
 	tile_position = convert_coordinate(0, 0)
 	$Hamster.position = Vector2(tile_position[0], tile_position[1])
+	tile_position = convert_coordinate(6, 6)
+	$Bee.position = Vector2(tile_position[0], tile_position[1])
 	
 # Returns all the positions that are a given distance from a given (x, y) on the Board
 func pathfind(pos, distance):
@@ -62,11 +69,9 @@ func _get_neighbors(pos):
 func _input(event):
 	if $Menu.is_visible():
 		return
-	if moving and event.is_action_pressed("ui_accept"):
-		var tile_position = convert_coordinate(cursor_pos.x, cursor_pos.y)
-		$Hamster.move(tile_position[0], tile_position[1])
-		unit_pos = cursor_pos
-		moving = false
+	if action and event.is_action_pressed("ui_accept"):
+		emit_signal(signal_callback)
+		action = false
 		return
 	if event.is_action_pressed("ui_select") and cursor_pos == unit_pos:
 		$Menu.buttons[0].grab_focus()
@@ -104,7 +109,38 @@ func place_cursor(show = false):
 	$Cursor.position.x -= 10
 	if show:
 		$Cursor.show()
+	update_hud()
+
+func update_hud():
+	var unit : Unit
+	if cursor_pos == bee_pos:
+		unit = $Bee
+	if cursor_pos == unit_pos:
+		unit = $Hamster
+	if not unit:
+		$HUD.hide()
+		return
+		
+	$HUD/Stats/ATKVal.text = str(unit.atk)
+	$HUD/Stats/HPVal.text = str(unit.hp)
+	$HUD/Stats/DEFVal.text = str(unit.def)
+	$HUD.show()
 
 func _on_move_button_down():
-	moving = true
+	action = true
+	signal_callback = "move"
 	$Menu.hide()
+
+func move():
+	var tile_position = convert_coordinate(cursor_pos.x, cursor_pos.y)
+	$Hamster.move(tile_position[0], tile_position[1])
+	unit_pos = cursor_pos
+
+func _on_fight_button_down():
+	action = true
+	signal_callback = "fight"
+	$Menu.hide()
+
+func fight():
+	if cursor_pos == bee_pos:
+		$Hamster.fight($Bee)
