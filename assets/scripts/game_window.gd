@@ -16,6 +16,8 @@ func _ready():
 func init():
 	$Hamster.position = Vector2(0, 150)
 	$Bee.position = convert_coordinate(Vector2(6, 6))
+
+	
 	
 func _input(event):
 	if $Menu.is_visible():
@@ -24,8 +26,8 @@ func _input(event):
 		emit_signal(signal_callback)
 		action = false
 	if action and event.is_action_pressed("ui_accept"):
-		var tile_position = convert_coordinate(Vector2(cursor_pos.x, cursor_pos.y))
-		$Hamster.move(tile_position[0], tile_position[1])
+		var tile_position = convert_coordinate(cursor_pos)
+		$Hamster.move(tile_position)
 		unit_pos = cursor_pos
 		action = false
 		return

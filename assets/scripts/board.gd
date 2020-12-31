@@ -43,17 +43,44 @@ func get_neighbors(pos):
 # Returns a list of all tiles accessible from the given tile within 
 # a given Manhattan distance
 func find_accessible_tiles(tile, distance):
-	return _pathfinder(tile, distance, [])
+	var accesible_tiles = []
+	for dx in range(-distance, distance + 1):
+		var x = (dx + tile.pos.x)
+		if x < 0 or x >= len(tiles):
+			continue
+		for dy in range(-distance, distance + 1):
+			if abs(dx) + abs(dy) > distance:
+				continue
+			var y = (dy + tile.pos.y)
+			if y < 0 or y >= len(tiles):
+				continue
+			if tiles[x][y].passable and len(_pathfinder(tiles[x][y], tile, distance)) > 0:
+				accesible_tiles.append(tiles[x][y])
+	return accesible_tiles
 
-func _pathfinder(tile, distance, seen):
-	if distance == 0:
-		return tile
-	var neighbors = tile.get_neighbors()
-	for neighbor in neighbors:
-		if not neighbor in seen and neighbor.is_passable():
-			seen += _pathfinder(neighbor, distance - 1, seen)
-	return seen
-	
+# Returns the list of tiles that make up a path from an origin tile to a goal tile.
+func _pathfinder(origin, destination, distance):
+	if distance < 0:
+		return []
+	if origin == destination:
+		return [origin]
+	for neighbor in origin.get_neighbors():
+		if neighbor.is_passable():
+			var neighbor_path = _pathfinder(neighbor, destination, distance - 1)
+			if len(neighbor_path) > 0:
+				return [origin] + neighbor_path
+	return []
+
+# Highlights the given tiles
+func hightlight_tiles(tiles):
+	for tile in tiles:
+		tile.highlight()
+
+# Un-highlights the given tiles
+func unhighlight_tiles(tiles):
+	for tile in tiles:
+		tile.unhighlight()
+		
 # Converts from the coordinate on the board to the coordinate
 # on the screen. 
 # One tile in the x direction = +62.5x, +31y
