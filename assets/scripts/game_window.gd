@@ -1,4 +1,7 @@
-extends Board
+extends Node2D
+class_name GameWindow
+
+var board
 
 var cursor_pos = Vector2(0, 0)
 var unit_pos = Vector2(0, 0)
@@ -9,6 +12,13 @@ var signal_callback : String
 signal move
 signal fight
 
+# Initialize window with a board and the player's units
+func init(b: Board, playerunits):
+	board = b
+	add_child(board)
+	for player in playerunits:
+		add_child(player)
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	init()
@@ -16,6 +26,7 @@ func _ready():
 func init():
 	$Hamster.position = Vector2(0, 150)
 	$Bee.position = convert_coordinate(Vector2(6, 6))	
+
 	
 func _input(event):
 	if $Menu.is_visible():
@@ -54,7 +65,7 @@ func _input(event):
 	place_cursor()
 
 func place_cursor(show = false):
-	var tile_position = convert_coordinate(Vector2(cursor_pos.x, cursor_pos.y))
+	var tile_position = board.convert_coordinate(Vector2(cursor_pos.x, cursor_pos.y))
 	$Cursor.position = Vector2(tile_position[0], tile_position[1])
 	$Cursor.position.y -= 50
 	$Cursor.position.x -= 10

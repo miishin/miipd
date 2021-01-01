@@ -6,7 +6,6 @@
 [ext_resource path="res://assets/graphics/tilesets/tile_highlight.png" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 123, 61 )
 

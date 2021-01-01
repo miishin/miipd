@@ -1,5 +1,4 @@
 extends Node2D
-class_name Tile
 
 # Position of Tile (on Board)
 var pos
@@ -20,7 +19,7 @@ func _ready():
 	passable = true
 	
 # Place tile at a
-func place(pos_vector):
+func set_pos(pos_vector):
 	pos = pos_vector
 
 func set_top_neighbor(tile):

@@ -8,21 +8,22 @@ var tiles = []
 const OFFSET = 150
 
 # Size of the board
-var num_rows = 7
-var num_cols = 7
+var num_rows
+var num_cols
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass #
-
+func _init(r, c):
+	initialize_tiles(r, c)
+	
 # Instantiate board tiles
-func _init():
+func initialize_tiles(r, c):
+	num_rows = r
+	num_cols = c
 	var tile
 	for row in range(num_rows):
 		var row_tiles = []
 		for col in range(num_cols):
 			tile = tile_file.instance()
-			tile.place(Vector2(row, col))
+			tile.set_pos(Vector2(row, col))
 			tile.position = convert_coordinate(Vector2(row, col))
 			row_tiles.append(tile)
 			add_child(tile)
@@ -35,7 +36,7 @@ func _init():
 				tile.set_left_neighbor(neighbor)
 				neighbor.set_right_neighbor(tile)
 		tiles.append(row_tiles)
-
+	
 func get_neighbors(pos):
 	var tile = tiles[pos.x][pos.y]
 	return tile.get_neighbors()
