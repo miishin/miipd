@@ -10,9 +10,8 @@ var atk = 2
 var def = 1
 var mov = 2
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func _init():
+	pass
 
 func fight(other : Unit):
 	other.hp -= (self.atk - other.def)

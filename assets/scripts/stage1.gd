@@ -1,7 +1,5 @@
 extends Board
 
-var enemy_units
-
 func _init().(6, 6):
 	form_stage()
 

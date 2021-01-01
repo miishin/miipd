@@ -2,7 +2,8 @@ extends Node2D
 class_name Board
 
 var tile_file = preload("res://assets/scenes/tile.tscn")
-var units # for showing turn order
+var bee = preload("res://assets/scenes/units/bee.tscn")
+var enemy_units = []
 var tiles = []
 # Offset so Board isn't stuck to top of screen
 const OFFSET = 150
@@ -13,6 +14,11 @@ var num_cols
 
 func _init(r, c):
 	initialize_tiles(r, c)
+	var b = bee.instance()
+	enemy_units.append(b)
+	b.occupied_tile = Vector2(6, 6)
+	b.position = convert_coordinate(b.occupied_tile)
+	add_child(b)
 	
 # Instantiate board tiles
 func initialize_tiles(r, c):
@@ -98,3 +104,9 @@ func tile_coordinates(tile_list):
 	for tile in tile_list:
 		coordinates.append(convert_coordinate(tile.pos))
 	return coordinates
+
+func get_enemy(coordinates):
+	for enemy in enemy_units:
+		if enemy.occupied_tile == coordinates:
+			return enemy
+	return null
