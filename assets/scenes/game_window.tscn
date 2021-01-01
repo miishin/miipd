@@ -45,13 +45,13 @@ z_index = 3
 texture = ExtResource( 6 )
 
 [node name="Hamster" parent="." index="2" instance=ExtResource( 5 )]
-z_index = 1
+z_index = 2
 
 [node name="Node2D" parent="Hamster" index="1" instance=ExtResource( 3 )]
 scale = Vector2( 0.8, 0.8 )
 
 [node name="Bee" parent="." index="3" instance=ExtResource( 5 )]
-z_index = 1
+z_index = 2
 
 [node name="BeeSprite" type="Sprite" parent="Bee" index="1"]
 position = Vector2( -8, 0 )

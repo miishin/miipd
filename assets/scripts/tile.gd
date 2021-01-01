@@ -51,8 +51,17 @@ func highlight():
 func unhighlight():
 	$Highlight.visible = false
 
+func is_highlighted():
+	return $Highlight.visible
+
 func toggle_highlight():
 	$Highlight.visible = not $Highlight.visible
 
 func toggle_passable():
 	passable = not passable
+
+func select():
+	$SelectLight.visible = true
+
+func deselect():
+	$SelectLight.visible = false

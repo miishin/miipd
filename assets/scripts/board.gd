@@ -72,13 +72,13 @@ func _pathfinder(origin, destination, distance):
 	return []
 
 # Highlights the given tiles
-func hightlight_tiles(tiles):
-	for tile in tiles:
+func hightlight_tiles(tile_list):
+	for tile in tile_list:
 		tile.highlight()
 
 # Un-highlights the given tiles
-func unhighlight_tiles(tiles):
-	for tile in tiles:
+func unhighlight_tiles(tile_list):
+	for tile in tile_list:
 		tile.unhighlight()
 		
 # Converts from the coordinate on the board to the coordinate
@@ -92,6 +92,8 @@ func convert_coordinate(pos):
 	new_y = 31 * (pos.x + pos.y) + OFFSET
 	return Vector2(new_x, new_y)
 
-func in_range(tile_origin, tile_dest, dist):
-	# check if tile is within range <= dist
-	pass
+func tile_coordinates(tile_list):
+	var coordinates = []
+	for tile in tile_list:
+		coordinates.append(convert_coordinate(tile.pos))
+	return coordinates

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/scripts/tile.gd" type="Script" id=1]
 [ext_resource path="res://assets/graphics/tilesets/grassy_tile.png" type="Texture" id=2]
 [ext_resource path="res://assets/graphics/tilesets/highlight.png" type="Texture" id=3]
+[ext_resource path="res://assets/graphics/tilesets/tile_highlight.png" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -28,3 +29,10 @@ texture = ExtResource( 2 )
 visible = false
 position = Vector2( 0, 21 )
 frames = SubResource( 2 )
+
+[node name="SelectLight" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0.50193, 37.9983 )
+z_index = 1
+z_as_relative = false
+texture = ExtResource( 4 )
