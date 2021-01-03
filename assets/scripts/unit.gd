@@ -1,8 +1,8 @@
 extends Node2D
+class_name Unit
 
 const MOVE_TIME = 0.25
 
-class_name Unit
 var occupied_tile
 
 var hp = 10
@@ -16,13 +16,13 @@ func _init():
 func fight(other : Unit):
 	other.hp -= (self.atk - other.def)
 
-func move(start, end, delay = 0):
+func move(start : Vector2, end : Vector2, delay = 0) -> void:
 	$Tween.interpolate_property(self, "position",
 		start, end, MOVE_TIME,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, delay)
 	$Tween.start()
 
-func move_path(positions):
+func move_path(positions: Array) -> void:
 	for i in range(len(positions)):
 		var start = self.position
 		if i > 0:

@@ -12,7 +12,7 @@ const OFFSET = 150
 var num_rows
 var num_cols
 
-func _init(r, c):
+func _init(r : int, c : int) -> void:
 	initialize_tiles(r, c)
 	var b = bee.instance()
 	enemy_units.append(b)
@@ -21,7 +21,7 @@ func _init(r, c):
 	add_child(b)
 	
 # Instantiate board tiles
-func initialize_tiles(r, c):
+func initialize_tiles(r : int, c : int) -> void:
 	num_rows = r
 	num_cols = c
 	var tile
@@ -43,13 +43,13 @@ func initialize_tiles(r, c):
 				neighbor.set_right_neighbor(tile)
 		tiles.append(row_tiles)
 	
-func get_neighbors(pos):
+func get_neighbors(pos : Vector2) -> Array:
 	var tile = tiles[pos.x][pos.y]
 	return tile.get_neighbors()
 
 # Returns a list of all tiles accessible from the given tile within 
 # a given Manhattan distance
-func find_accessible_tiles(tile, distance):
+func find_accessible_tiles(tile : Tile, distance : int) -> Array:
 	var accesible_tiles = []
 	for dx in range(-distance, distance + 1):
 		var x = (dx + tile.pos.x)
@@ -66,7 +66,7 @@ func find_accessible_tiles(tile, distance):
 	return accesible_tiles
 
 # Returns the list of tiles that make up a path from an origin tile to a goal tile.
-func _pathfinder(origin, destination, distance):
+func _pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
 	if distance < 0:
 		return []
 	if origin == destination:
@@ -79,12 +79,12 @@ func _pathfinder(origin, destination, distance):
 	return []
 
 # Highlights the given tiles
-func hightlight_tiles(tile_list):
+func hightlight_tiles(tile_list : Array) -> void:
 	for tile in tile_list:
 		tile.highlight()
 
 # Un-highlights the given tiles
-func unhighlight_tiles(tile_list):
+func unhighlight_tiles(tile_list : Array) -> void:
 	for tile in tile_list:
 		tile.unhighlight()
 		
@@ -92,20 +92,21 @@ func unhighlight_tiles(tile_list):
 # on the screen. 
 # One tile in the x direction = +62.5x, +31y
 # One tile in the y direction = -62.5x, +31y
-func convert_coordinate(pos):
+func convert_coordinate(pos : Vector2) -> Vector2:
 	var new_x
 	var new_y
-	new_x = 62.5 * pos.x - 62.5 * pos.y
+	new_x = 62 * pos.x - 62 * pos.y
 	new_y = 31 * (pos.x + pos.y) + OFFSET
 	return Vector2(new_x, new_y)
 
-func tile_coordinates(tile_list):
+# Converts multiple coordinates
+func tile_coordinates(tile_list : Array) -> Array:
 	var coordinates = []
 	for tile in tile_list:
 		coordinates.append(convert_coordinate(tile.pos))
 	return coordinates
 
-func get_enemy(coordinates):
+func get_enemy(coordinates : Vector2) -> Unit:
 	for enemy in enemy_units:
 		if enemy.occupied_tile == coordinates:
 			return enemy

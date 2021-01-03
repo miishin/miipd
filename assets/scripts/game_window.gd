@@ -13,14 +13,14 @@ signal move
 signal fight
 
 # Initialize window with a board and the player's units
-func init(b: Board, playerunits):
+func init(b: Board, playerunits: Array) -> void:
 	board = b
 	add_child(board)
 	current_unit = playerunits[0]
 	for player in playerunits:
 		add_child(player)
 	
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if $Menu.is_visible():
 		return
 	if action and event.is_action_pressed("ui_accept"):
@@ -57,7 +57,7 @@ func _input(event):
 	cursor_pos.y = (int(cursor_pos.y) + dy + 7) % 7
 	place_cursor()
 
-func place_cursor(show = false):
+func place_cursor(show = false) -> void:
 	var tile_position = board.convert_coordinate(Vector2(cursor_pos.x, cursor_pos.y))
 	$Cursor.position = Vector2(tile_position[0], tile_position[1])
 	$Cursor.position.y -= 50
@@ -67,7 +67,7 @@ func place_cursor(show = false):
 		$Cursor.show()
 	update_hud()
 
-func update_hud():
+func update_hud() -> void:
 	var unit : Unit
 	unit = board.get_enemy(cursor_pos)
 	if cursor_pos == unit_pos:
@@ -81,12 +81,12 @@ func update_hud():
 	$HUD/Stats/DEFVal.text = str(unit.def)
 	$HUD.show()
 
-func _on_move_button_down():
+func _on_move_button_down() -> void:
 	action = true
 	signal_callback = "move"
 	$Menu.hide()
 
-func move():
+func move() -> void:
 	if not board.tiles[cursor_pos.x][cursor_pos.y].is_highlighted():
 		return
 	var tile_path = board._pathfinder(board.tiles[unit_pos.x][unit_pos.y],
@@ -97,12 +97,12 @@ func move():
 	unit_pos = cursor_pos
 	action = false
 
-func _on_fight_button_down():
+func _on_fight_button_down() -> void:
 	action = true
 	signal_callback = "fight"
 	$Menu.hide()
 
-func fight():
+func fight() -> void:
 	var enemy = board.get_enemy(cursor_pos)
 	if enemy:
 		current_unit.fight(enemy)

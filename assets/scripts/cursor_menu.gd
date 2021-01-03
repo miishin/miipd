@@ -3,7 +3,7 @@ extends Control
 var buttons = []
 var current_selection = 0
 
-func _ready():
+func _ready() -> void:
 	for child in get_children():
 		if child is Button:
 			remove_child(child)
@@ -13,7 +13,7 @@ func _ready():
 	buttons[0].grab_focus()
 	
 	
-func _input(event):
+func _input(event: InputEvent) -> void:
 	var dir = 0
 	if Input.is_action_just_pressed("ui_down"): 
 		dir += 1
@@ -23,7 +23,7 @@ func _input(event):
 	_move_cursor()
 	
 
-func _move_cursor():
+func _move_cursor() -> void:
 	if len(buttons) == 0:
 		return
 	
@@ -31,7 +31,7 @@ func _move_cursor():
 	$Cursor.position.y = $VBoxContainer.rect_position.y + current_button.rect_position.y \
 		+ current_button.rect_size.y / 2
 
-func add_button(button):
+func add_button(button: Button) -> void:
 	$VBoxContainer.add_child(button)
 	
 	if len(buttons) >= 1:
