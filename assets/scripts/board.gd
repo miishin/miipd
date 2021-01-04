@@ -111,3 +111,6 @@ func get_enemy(coordinates : Vector2) -> Unit:
 		if enemy.occupied_tile == coordinates:
 			return enemy
 	return null
+	
+func get_tile(pos: Vector2) -> Tile:
+	return tiles[pos.x][pos.y]

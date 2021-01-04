@@ -2,6 +2,7 @@ extends Control
 
 
 func _ready():
+	randomize()
 	pass
 
 func _on_quit_pressed():

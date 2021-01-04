@@ -51,7 +51,7 @@ func highlight() -> void:
 func unhighlight() -> void:
 	$Highlight.visible = false
 
-func is_highlighted() -> void:
+func is_highlighted() -> bool:
 	return $Highlight.visible
 
 func toggle_highlight() -> void:

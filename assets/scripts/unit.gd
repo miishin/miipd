@@ -5,6 +5,7 @@ const MOVE_TIME = 0.25
 
 var occupied_tile
 
+var spd = (randi() % 10) + 1
 var hp = 10
 var atk = 2
 var def = 1

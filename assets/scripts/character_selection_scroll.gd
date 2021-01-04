@@ -7,7 +7,6 @@ const SCROLL_MAX_SPEED : float = 100.0
 
 func _process(delta : float) -> void:
 	speed = lerp(speed, 0.0, SCROLL_DECCELERATION * delta)
-	$Viewport.get_children()
 	
 func _input(event : InputEvent) -> void:
 	if event.is_action("ui_left"):
