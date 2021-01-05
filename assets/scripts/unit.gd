@@ -4,6 +4,7 @@ class_name Unit
 const MOVE_TIME = 0.25
 
 var occupied_tile
+var sprite = null
 
 var spd = (randi() % 10) + 1
 var hp = 10
@@ -11,10 +12,13 @@ var atk = 2
 var def = 1
 var mov = 2
 
-func _init():
-	pass
+func _ready() -> void:
+	for child in get_children():
+		if child is AnimatedSprite or child is Sprite:
+			sprite = child
+			break
 
-func fight(other : Unit):
+func fight(other : Unit) -> void:
 	other.hp -= (self.atk - other.def)
 
 func move(start : Vector2, end : Vector2, delay = 0) -> void:
@@ -29,3 +33,19 @@ func move_path(positions: Array) -> void:
 		if i > 0:
 			start = positions[i-1]
 		move(start, positions[i], i * MOVE_TIME) 
+
+func get_size() -> Vector2:
+	if sprite is AnimatedSprite:
+		var sprite_frames : SpriteFrames
+		sprite_frames = sprite.get_sprite_frames()
+		return sprite_frames.get_frame(sprite_frames.get_animation_names()[0], 0).get_size()
+	if sprite is Sprite:
+		return sprite.texture.get_size()
+	return Vector2(0,0)
+	
+func clone() -> Unit:
+	var dup = get_script().new()
+	dup.spd = self.spd
+	dup.sprite = self.sprite
+	dup.add_child(dup.sprite.duplicate())
+	return dup

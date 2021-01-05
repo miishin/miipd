@@ -5,6 +5,7 @@ const hamster = preload("res://assets/scenes/units/hamster.tscn")
 
 var board : Board
 
+var next            : bool
 var action          : bool
 var player_turn     : bool
 var stage_number    : int
@@ -41,6 +42,8 @@ func init_units() -> void:
 		all_units.append(unit)
 		turn_queue.append(unit)
 	turn_queue.sort_custom(self, "spd_comparator")
+	for unit in turn_queue:
+		$TurnQueue.add_unit(unit.clone())
 
 func spd_comparator(unit1 : Unit, unit2 : Unit) -> int:
 	return unit1.spd > unit2.spd
@@ -87,15 +90,21 @@ func _input(event: InputEvent) -> void:
 func perform_action() -> void:
 	emit_signal(signal_callback)
 	$Cursor.visible = false
-	player_turn = false
-	board.get_tile(cursor_pos).deselect()
-	update_turn_queue()
+	if next:
+		player_turn = false
+		next = false
+		board.get_tile(cursor_pos).deselect()
+		update_turn_queue()
 	
 func update_turn_queue() -> void:
 	var current = turn_queue[0]
 	turn_queue = turn_queue.slice(1, len(turn_queue) - 1, 1) + [current]
 	current_unit = turn_queue[0]
 	player_turn = true
+	
+	current = $TurnQueue.units[0]
+	$TurnQueue.units = $TurnQueue.units.slice(1, len(turn_queue) - 1, 1) + [current]
+	$TurnQueue.update()
 
 func move_cursor() -> void:
 	var dx = 0
@@ -155,6 +164,7 @@ func move() -> void:
 	current_unit.move_path(board.tile_coordinates(tile_path))
 	current_unit.occupied_tile = cursor_pos
 	action = false
+	next = true
 
 func _on_fight_button_down() -> void:
 	action = true
@@ -164,5 +174,8 @@ func _on_fight_button_down() -> void:
 func fight() -> void:
 	var enemy = board.get_enemy(cursor_pos)
 	if enemy:
+		var unit_tile = board.get_tile(current_unit.occupied_tile)
 		current_unit.fight(enemy)
 		action = false
+		board.unhighlight_tiles(board.find_accessible_tiles(unit_tile, current_unit.mov))
+		next = true

@@ -28,12 +28,18 @@ _global_script_classes=[ {
 "class": "Unit",
 "language": "GDScript",
 "path": "res://assets/scripts/unit.gd"
+}, {
+"base": "Node2D",
+"class": "UnitList",
+"language": "GDScript",
+"path": "res://assets/scripts/unit_list.gd"
 } ]
 _global_script_class_icons={
 "Board": "",
 "GameWindow": "",
 "Tile": "",
-"Unit": ""
+"Unit": "",
+"UnitList": ""
 }
 
 [application]

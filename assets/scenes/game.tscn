@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/scripts/manager.gd" type="Script" id=1]
 [ext_resource path="res://assets/scenes/cursor_menu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/graphics/sprites/cursor.png" type="Texture" id=3]
+[ext_resource path="res://assets/scripts/unit_list.gd" type="Script" id=6]
 
 [node name="Node2D" type="Node2D"]
 position = Vector2( 640, 0 )
@@ -118,14 +119,9 @@ margin_right = 44.0
 margin_bottom = 68.0
 text = "0"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = -416.363
-margin_top = 642.0
-margin_right = 399.637
-margin_bottom = 696.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="TurnQueue" type="Node2D" parent="."]
+position = Vector2( -370.8, 624 )
+script = ExtResource( 6 )
 [connection signal="fight" from="." to="." method="fight"]
 [connection signal="move" from="." to="." method="move"]
 [connection signal="button_down" from="Menu/Move" to="." method="_on_move_button_down"]
