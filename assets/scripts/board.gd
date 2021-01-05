@@ -7,6 +7,10 @@ var enemy_units = []
 var tiles = []
 # Offset so Board isn't stuck to top of screen
 const OFFSET = 150
+# The horizontal distance from the center of the tile to the edge
+const TILE_HALF_WIDTH = 62
+# The vertical distance from the center of the tile to the top
+const TILE_HALF_HEIGHT = 31
 
 # Size of the board
 var num_rows
@@ -29,6 +33,7 @@ func initialize_tiles(r : int, c : int) -> void:
 		var row_tiles = []
 		for col in range(num_cols):
 			tile = tile_file.instance()
+			tile.init_tile()
 			tile.set_pos(Vector2(row, col))
 			tile.position = convert_coordinate(Vector2(row, col))
 			row_tiles.append(tile)
@@ -50,7 +55,7 @@ func get_neighbors(pos : Vector2) -> Array:
 # Returns a list of all tiles accessible from the given tile within 
 # a given Manhattan distance
 func find_accessible_tiles(tile : Tile, distance : int) -> Array:
-	var accesible_tiles = []
+	var accessible_tiles = []
 	for dx in range(-distance, distance + 1):
 		var x = (dx + tile.pos.x)
 		if x < 0 or x >= len(tiles):
@@ -61,9 +66,9 @@ func find_accessible_tiles(tile : Tile, distance : int) -> Array:
 			var y = (dy + tile.pos.y)
 			if y < 0 or y >= len(tiles):
 				continue
-			if tiles[x][y].passable and len(_pathfinder(tiles[x][y], tile, distance)) > 0:
-				accesible_tiles.append(tiles[x][y])
-	return accesible_tiles
+			if tiles[x][y].is_passable() and len(_pathfinder(tiles[x][y], tile, distance)) > 0:
+				accessible_tiles.append(tiles[x][y])
+	return accessible_tiles
 
 # Returns the list of tiles that make up a path from an origin tile to a goal tile.
 func _pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
@@ -95,8 +100,8 @@ func unhighlight_tiles(tile_list : Array) -> void:
 func convert_coordinate(pos : Vector2) -> Vector2:
 	var new_x
 	var new_y
-	new_x = 62 * pos.x - 62 * pos.y
-	new_y = 31 * (pos.x + pos.y) + OFFSET
+	new_x = TILE_HALF_WIDTH * pos.x - TILE_HALF_WIDTH * pos.y
+	new_y = TILE_HALF_HEIGHT * (pos.x + pos.y) + OFFSET
 	return Vector2(new_x, new_y)
 
 # Converts multiple coordinates

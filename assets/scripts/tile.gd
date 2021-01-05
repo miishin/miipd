@@ -15,8 +15,7 @@ var left_neighbor
 var right_neighbor
 var neighbors = []
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func init_tile():
 	passable = true
 	
 # Place tile at a
