@@ -7,23 +7,24 @@ func before_all():
 
 func test_initialize_tiles():
 	assert_eq(len(_board.tiles), 7)
+	var result = true
 	for i in range(7):
-		assert_eq(len(_board.tiles[i]), 7)
+		result = result and len(_board.tiles[i]) == 7
 
 func test_neighbors():
 	var neighbors = _board.tiles[0][0].get_neighbors()
-	var result = false
-	result = neighbors.has(_board.tiles[1][0])
-	result = neighbors.has(_board.tiles[0][1])
+	var result = true
+	result = result and neighbors.has(_board.tiles[1][0])
+	result = result and neighbors.has(_board.tiles[0][1])
 	assert_true(result)
 
 # Neighbors	
 func test_find_accessible_tiles_dist1():
 	var neighbors = _board.tiles[3][3].get_neighbors()
 	var accessible = _board.find_accessible_tiles(_board.tiles[3][3], 1)
-	var result
+	var result = true
 	for tile in neighbors:
-		result = accessible.has(tile)
+		result = result and accessible.has(tile)
 	assert_true(result)
 	
 func test_find_accessible_tiles_dist2():
@@ -38,17 +39,17 @@ func test_find_accessible_tiles_dist2():
 	reachable_tiles.append(_board.tiles[4][2])
 	reachable_tiles.append(_board.tiles[4][4])
 	reachable_tiles.append(_board.tiles[5][3])
-	var result = false
+	var result = true
 	for reachable_tile in reachable_tiles:
-		result = accessible.has(reachable_tile)
+		result = result and accessible.has(reachable_tile)
 	assert_true(result)
 
 func test_pathfinder():
 	var path = [_board.tiles[0][0], _board.tiles[1][0], _board.tiles[2][0], _board.tiles[3][0], _board.tiles[4][0]]
 	var found_path = _board._pathfinder(_board.tiles[0][0], _board.tiles[4][0], 4)
-	var result = false
+	var result = true
 	for tile in path:
-		result = found_path.has(tile)
+		result = result and found_path.has(tile)
 	assert_true(result)
 
 func test_pathfinder_with_obstacle():
