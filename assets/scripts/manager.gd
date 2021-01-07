@@ -63,6 +63,8 @@ func init(units: Array) -> void:
 	current_unit = turn_queue[0]
 	if current_unit in player_units:
 		player_turn = true
+	else:
+		ai_turn()
 	
 func _input(event: InputEvent) -> void:
 	if !player_turn:
@@ -97,14 +99,49 @@ func perform_action() -> void:
 		update_turn_queue()
 	
 func update_turn_queue() -> void:
-	var current = turn_queue[0]
-	turn_queue = turn_queue.slice(1, len(turn_queue) - 1, 1) + [current]
+	var last_unit = turn_queue.pop_front()
+	turn_queue.push_back(last_unit)
 	current_unit = turn_queue[0]
-	player_turn = true
 	
-	current = $TurnQueue.units[0]
-	$TurnQueue.units = $TurnQueue.units.slice(1, len(turn_queue) - 1, 1) + [current]
+	last_unit = $TurnQueue.units.pop_front()
+	$TurnQueue.units.push_back(last_unit)
 	$TurnQueue.update()
+	
+	if not (current_unit in player_units):
+		ai_turn()
+	player_turn = true
+
+func ai_turn() -> void:
+	var closest_player = closest_unit(current_unit.occupied_tile, player_units)
+	var diff = current_unit.occupied_tile - closest_player.occupied_tile
+	diff = abs(diff.x) + abs(diff.y)
+	
+	var path = board.pathfinder(board.get_tile(current_unit.occupied_tile), board.get_tile(closest_player.occupied_tile), diff)
+	path = path.slice(1, len(path) - 2) # Ignore last tile so that AI doesn't stand on top of player
+	
+	if len(path) == 0:
+		current_unit.fight(closest_player)
+	else:
+		var accessible_path = path.slice(0, current_unit.mov)
+		var yielded = current_unit.move_path(board.tile_coordinates(accessible_path))
+		if yielded:
+			Globals.yielded_animations.push_back(yielded)
+		if accessible_path == path:
+			current_unit.fight(closest_player)
+		current_unit.occupied_tile = accessible_path[-1].pos
+	update_turn_queue()
+	
+func closest_unit(origin : Vector2, units : Array) -> Unit:
+	var closest = units[0]
+	var diff_vector = origin - units[0].occupied_tile
+	var min_distance = abs(diff_vector.x) + abs(diff_vector.y)
+	for unit in units:
+		diff_vector = origin - unit.occupied_tile
+		var diff = abs(diff_vector.x) + abs(diff_vector.y)
+		if diff < min_distance:
+			min_distance = diff
+			closest = unit
+	return closest
 
 func move_cursor() -> void:
 	var dx = 0
@@ -158,10 +195,12 @@ func move() -> void:
 	if not board.get_tile(cursor_pos).is_highlighted():
 		return
 	var unit_tile = board.get_tile(current_unit.occupied_tile)
-	var tile_path = board._pathfinder(unit_tile, board.get_tile(cursor_pos), current_unit.mov)
-	tile_path = tile_path.slice(1, len(tile_path) - 1)
+	var tile_path = board.pathfinder(unit_tile, board.get_tile(cursor_pos), current_unit.mov)
+	tile_path.pop_front()
 	board.unhighlight_tiles(board.find_accessible_tiles(unit_tile, current_unit.mov))
-	current_unit.move_path(board.tile_coordinates(tile_path))
+	var yielded = current_unit.move_path(board.tile_coordinates(tile_path))
+	if yielded:
+		Globals.yielded_animations.push_back(yielded)
 	current_unit.occupied_tile = cursor_pos
 	action = false
 	next = true

@@ -54,6 +54,10 @@ config/name="miipd"
 run/main_scene="res://assets/scenes/main_menu.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Globals="*res://assets/scripts/globals.gd"
+
 [display]
 
 window/size/width=1280
