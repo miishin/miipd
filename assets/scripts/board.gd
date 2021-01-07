@@ -19,10 +19,15 @@ var num_cols
 func _init(r : int, c : int) -> void:
 	initialize_tiles(r, c)
 	var b = bee.instance()
+	var b2 = bee.instance()
 	enemy_units.append(b)
+	enemy_units.append(b2)
 	b.occupied_tile = Vector2(6, 6)
 	b.position = convert_coordinate(b.occupied_tile)
+	b2.occupied_tile = Vector2(0, 6)
+	b2.position = convert_coordinate(b2.occupied_tile)
 	add_child(b)
+	add_child(b2)
 	
 # Instantiate board tiles
 func initialize_tiles(r : int, c : int) -> void:
@@ -66,19 +71,19 @@ func find_accessible_tiles(tile : Tile, distance : int) -> Array:
 			var y = (dy + tile.pos.y)
 			if y < 0 or y >= len(tiles):
 				continue
-			if tiles[x][y].is_passable() and len(_pathfinder(tiles[x][y], tile, distance)) > 0:
+			if tiles[x][y].is_passable() and len(pathfinder(tiles[x][y], tile, distance)) > 0:
 				accessible_tiles.append(tiles[x][y])
 	return accessible_tiles
 
 # Returns the list of tiles that make up a path from an origin tile to a goal tile.
-func _pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
+func pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
 	if distance < 0:
 		return []
 	if origin == destination:
 		return [origin]
 	for neighbor in origin.get_neighbors():
 		if neighbor.is_passable():
-			var neighbor_path = _pathfinder(neighbor, destination, distance - 1)
+			var neighbor_path = pathfinder(neighbor, destination, distance - 1)
 			if len(neighbor_path) > 0:
 				return [origin] + neighbor_path
 	return []

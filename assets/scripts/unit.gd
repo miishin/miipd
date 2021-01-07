@@ -28,6 +28,10 @@ func move(start : Vector2, end : Vector2, delay = 0) -> void:
 	$Tween.start()
 
 func move_path(positions: Array) -> void:
+	while Globals.playing:
+		yield()
+	Globals.playing = true
+	Globals.tween_count = len(positions)
 	for i in range(len(positions)):
 		var start = self.position
 		if i > 0:
@@ -49,3 +53,11 @@ func clone() -> Unit:
 	dup.sprite = self.sprite
 	dup.add_child(dup.sprite.duplicate())
 	return dup
+
+func _on_tween_completed(object, key):
+	Globals.tween_count -= 1
+	if Globals.tween_count == 0:
+		Globals.playing = false
+		if len(Globals.yielded_animations) > 0:
+			var yielded = Globals.yielded_animations.pop_front()
+			yielded.resume()

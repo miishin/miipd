@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node2D",
+"class": "Ability",
+"language": "GDScript",
+"path": "res://assets/scripts/ability.gd"
+}, {
+"base": "Node2D",
 "class": "Board",
 "language": "GDScript",
 "path": "res://assets/scripts/board.gd"
@@ -35,6 +40,7 @@ _global_script_classes=[ {
 "path": "res://assets/scripts/unit_list.gd"
 } ]
 _global_script_class_icons={
+"Ability": "",
 "Board": "",
 "GameWindow": "",
 "Tile": "",
@@ -47,6 +53,10 @@ _global_script_class_icons={
 config/name="miipd"
 run/main_scene="res://assets/scenes/main_menu.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Globals="*res://assets/scripts/globals.gd"
 
 [display]
 
