@@ -22,3 +22,6 @@ func update():
 		assert(unit is Unit)
 		unit.position.x = start
 		start += unit.get_size().x + SPACING
+		
+func delete_unit(unit : Unit):
+	units.erase(unit)

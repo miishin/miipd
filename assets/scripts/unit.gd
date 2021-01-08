@@ -6,11 +6,11 @@ const MOVE_TIME = 0.25
 var occupied_tile
 var sprite = null
 
-var spd = (randi() % 10) + 1
-var hp = 10
-var atk = 2
-var def = 1
-var mov = 2
+var spd : int = (randi() % 10) + 1
+var hp  : int = 1
+var atk : int = 2
+var def : int = 1
+var mov : int = 2
 
 func _ready() -> void:
 	for child in get_children():
@@ -61,3 +61,6 @@ func _on_tween_completed(object, key):
 		if len(Globals.yielded_animations) > 0:
 			var yielded = Globals.yielded_animations.pop_front()
 			yielded.resume()
+
+func dead():
+	return hp <= 0
