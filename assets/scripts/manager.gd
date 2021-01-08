@@ -45,7 +45,7 @@ func init_units() -> void:
 	for unit in turn_queue:
 		$TurnQueue.add_unit(unit.clone())
 
-func spd_comparator(unit1 : Unit, unit2 : Unit) -> int:
+func spd_comparator(unit1 : Unit, unit2 : Unit) -> bool:
 	return unit1.spd > unit2.spd
 
 # Initialize window with a board and the player's units
@@ -96,7 +96,18 @@ func perform_action() -> void:
 		player_turn = false
 		next = false
 		board.get_tile(cursor_pos).deselect()
-		update_turn_queue()
+		update_gamestate()
+
+func is_stage_over():
+	return len(board.enemy_units) == 0
+
+func is_game_over():
+	return len(player_units) == 0
+	
+func update_gamestate():
+	if is_stage_over() or is_game_over():
+		get_tree().change_scene("res://assets/scenes/game_over.tscn")
+	update_turn_queue()
 	
 func update_turn_queue() -> void:
 	var last_unit = turn_queue.pop_front()
@@ -113,6 +124,8 @@ func update_turn_queue() -> void:
 
 func ai_turn() -> void:
 	var closest_player = closest_unit(current_unit.occupied_tile, player_units)
+	if not closest_player:
+		return
 	var diff = current_unit.occupied_tile - closest_player.occupied_tile
 	diff = abs(diff.x) + abs(diff.y)
 	
@@ -121,6 +134,8 @@ func ai_turn() -> void:
 	
 	if len(path) == 0:
 		current_unit.fight(closest_player)
+		if closest_player.dead():
+			remove_unit(closest_player)
 	else:
 		var accessible_path = path.slice(0, current_unit.mov)
 		var yielded = current_unit.move_path(board.tile_coordinates(accessible_path))
@@ -128,10 +143,14 @@ func ai_turn() -> void:
 			Globals.yielded_animations.push_back(yielded)
 		if accessible_path == path:
 			current_unit.fight(closest_player)
+			if closest_player.dead():
+				remove_unit(closest_player)
 		current_unit.occupied_tile = accessible_path[-1].pos
-	update_turn_queue()
+	update_gamestate()
 	
 func closest_unit(origin : Vector2, units : Array) -> Unit:
+	if len(units) == 0:
+		return null
 	var closest = units[0]
 	var diff_vector = origin - units[0].occupied_tile
 	var min_distance = abs(diff_vector.x) + abs(diff_vector.y)
@@ -215,6 +234,22 @@ func fight() -> void:
 	if enemy:
 		var unit_tile = board.get_tile(current_unit.occupied_tile)
 		current_unit.fight(enemy)
+		if enemy.dead():
+			remove_unit(enemy)
 		action = false
 		board.unhighlight_tiles(board.find_accessible_tiles(unit_tile, current_unit.mov))
 		next = true
+
+func remove_unit(unit : Unit):
+	if unit in board.enemy_units:
+		board.enemy_units.erase(unit)
+	elif unit in player_units:
+		player_units.erase(unit)
+	all_units.erase(unit)
+	turn_queue.erase(unit)
+	$TurnQueue.delete_unit(unit)
+	unit.queue_free()
+	
+	
+	
+	
