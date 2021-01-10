@@ -1,18 +1,8 @@
 extends Node2D
 class_name Ability
 
-# ANY - Ability can target any tile within its range
-# FIXED - Ability can only target tiles at its range (exactly n tiles)
-enum RangeType {ANY, FIXED}
-
 # Abilities target on the XY axis or diagonally or both
 enum RangeAngle {PERPENDICULAR, DIAGONAL, FULL}
-
-# Range of ability in tiles
-var ability_range : int
-
-# Size of AoE of ability (AoE = 1 for singular target) in tiles
-var aoe : int
 
 # Type of AoE. If aoe size is n:
 # Circular: all tiles reachable in n tiles
@@ -24,16 +14,31 @@ enum AoEType {CIRCULAR, LINE, PERPENDICULAR, DIAGONAL}
 # Whether this ability targets allies, enemies, or both
 enum AbilityTarget {ALLY, ENEMY, ALL}
 
-# Tooltip/description of ability
-var description : String
+# The type of debuff this ability inflicts
+enum Debuff {NONE}
 
 # How much damage this ability does
 # If AoE this is damage per tile
 # Negative damage = a heal
 var damage : int
 
-# The type of debuff this ability inflicts
-enum Debuff {NONE}
+# Range of ability in tiles (min, max)
+var ability_range : Vector2
+
+var range_angle : int
+
+var aoe_type : int
+
+var target : int
+
+var debuff : int 
+
+# Size of AoE of ability (AoE = 1 for singular target) in tiles
+var aoe : int
 
 # Accuracy (% to hit )
 var accuracy : int
+
+# Tooltip/description of ability
+var description : String
+#

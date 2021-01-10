@@ -22,7 +22,7 @@ signal fight
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	init([hamster.instance(), hamster.instance()])
+	init(Globals.player_characters)
 
 func set_coordinates(b : Board, units : Array) -> void:
 	var i = 0

@@ -1,7 +1,30 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://assets/scripts/character_select.gd" type="Script" id=1]
-[ext_resource path="res://assets/scripts/character_selection_scroll.gd" type="Script" id=2]
+[ext_resource path="res://assets/graphics/backgrounds/character_select.png" type="Texture" id=2]
+[ext_resource path="res://assets/graphics/character_select/char2.png" type="Texture" id=3]
+[ext_resource path="res://assets/graphics/character_select/char6.png" type="Texture" id=4]
+[ext_resource path="res://assets/graphics/character_select/char9.png" type="Texture" id=5]
+[ext_resource path="res://assets/graphics/character_select/back.png" type="Texture" id=6]
+[ext_resource path="res://assets/graphics/character_select/char1.png" type="Texture" id=7]
+[ext_resource path="res://assets/graphics/character_select/char7.png" type="Texture" id=8]
+[ext_resource path="res://assets/graphics/character_select/char5.png" type="Texture" id=9]
+[ext_resource path="res://assets/graphics/character_select/char10.png" type="Texture" id=10]
+[ext_resource path="res://assets/graphics/character_select/char4.png" type="Texture" id=11]
+[ext_resource path="res://assets/graphics/character_select/char3.png" type="Texture" id=12]
+[ext_resource path="res://assets/graphics/character_select/forward.png" type="Texture" id=13]
+[ext_resource path="res://assets/graphics/character_select/char8.png" type="Texture" id=14]
+[ext_resource path="res://assets/graphics/character_select/selection.png" type="Texture" id=15]
+[ext_resource path="res://assets/graphics/character_select/char3on.png" type="Texture" id=16]
+[ext_resource path="res://assets/graphics/character_select/char7on.png" type="Texture" id=17]
+[ext_resource path="res://assets/graphics/character_select/char6on.png" type="Texture" id=18]
+[ext_resource path="res://assets/graphics/character_select/char2on.png" type="Texture" id=19]
+[ext_resource path="res://assets/graphics/character_select/char9on.png" type="Texture" id=20]
+[ext_resource path="res://assets/graphics/character_select/char4on.png" type="Texture" id=21]
+[ext_resource path="res://assets/graphics/character_select/char10on.png" type="Texture" id=22]
+[ext_resource path="res://assets/graphics/character_select/char8on.png" type="Texture" id=23]
+[ext_resource path="res://assets/graphics/character_select/char1on.png" type="Texture" id=24]
+[ext_resource path="res://assets/graphics/character_select/char5on.png" type="Texture" id=25]
 
 [node name="CharacterSelect" type="Control"]
 anchor_right = 1.0
@@ -11,19 +34,159 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ViewportContainer" type="ViewportContainer" parent="."]
-margin_left = -2.66968
-margin_top = 330.0
-margin_right = 1277.33
-margin_bottom = 450.0
-script = ExtResource( 2 )
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -2.37842
+margin_top = 3.56763
+margin_right = 1277.62
+margin_bottom = 723.568
+texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Viewport" type="Viewport" parent="ViewportContainer"]
-size = Vector2( 1280, 120 )
-own_world = true
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_left = 81.2
+margin_top = 70.0
+margin_right = 1097.2
+margin_bottom = 474.0
+rect_scale = Vector2( 1.1, 1.1 )
+columns = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="c1" type="TextureButton" parent="GridContainer"]
+margin_right = 200.0
+margin_bottom = 200.0
+toggle_mode = true
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 24 )
+
+[node name="c2" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_right = 404.0
+margin_bottom = 200.0
+toggle_mode = true
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 19 )
+
+[node name="c3" type="TextureButton" parent="GridContainer"]
+margin_left = 408.0
+margin_right = 608.0
+margin_bottom = 200.0
+toggle_mode = true
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 16 )
+
+[node name="c4" type="TextureButton" parent="GridContainer"]
+margin_left = 612.0
+margin_right = 812.0
+margin_bottom = 200.0
+toggle_mode = true
+texture_normal = ExtResource( 11 )
+texture_pressed = ExtResource( 21 )
+
+[node name="c5" type="TextureButton" parent="GridContainer"]
+margin_left = 816.0
+margin_right = 1016.0
+margin_bottom = 200.0
+toggle_mode = true
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 25 )
+
+[node name="c6" type="TextureButton" parent="GridContainer"]
+margin_top = 204.0
+margin_right = 200.0
+margin_bottom = 404.0
+toggle_mode = true
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 18 )
+
+[node name="c7" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_top = 204.0
+margin_right = 404.0
+margin_bottom = 404.0
+toggle_mode = true
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 17 )
+
+[node name="c8" type="TextureButton" parent="GridContainer"]
+margin_left = 408.0
+margin_top = 204.0
+margin_right = 608.0
+margin_bottom = 404.0
+toggle_mode = true
+texture_normal = ExtResource( 14 )
+texture_pressed = ExtResource( 23 )
+
+[node name="c9" type="TextureButton" parent="GridContainer"]
+margin_left = 612.0
+margin_top = 204.0
+margin_right = 812.0
+margin_bottom = 404.0
+toggle_mode = true
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 20 )
+
+[node name="c10" type="TextureButton" parent="GridContainer"]
+margin_left = 816.0
+margin_top = 204.0
+margin_right = 1016.0
+margin_bottom = 404.0
+toggle_mode = true
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 22 )
+
+[node name="back" type="TextureButton" parent="."]
+margin_left = 81.2
+margin_top = 570.0
+margin_right = 281.2
+margin_bottom = 670.0
+texture_normal = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="forward" type="TextureButton" parent="."]
+margin_left = 999.0
+margin_top = 570.0
+margin_right = 1199.0
+margin_bottom = 670.0
+texture_normal = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="selectionbg" type="TextureRect" parent="."]
+margin_left = 440.0
+margin_top = 550.0
+margin_right = 840.0
+margin_bottom = 678.0
+texture = ExtResource( 15 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="selected" type="HBoxContainer" parent="."]
+margin_left = 440.0
+margin_top = 550.0
+margin_right = 840.0
+margin_bottom = 678.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="s1" type="Sprite" parent="selected"]
+centered = false
+
+[node name="s2" type="Sprite" parent="selected"]
+position = Vector2( 128, 0 )
+centered = false
+
+[node name="s3" type="Sprite" parent="selected"]
+position = Vector2( 256, 0 )
+centered = false
+[connection signal="pressed" from="back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="forward" to="." method="_on_forward_pressed"]

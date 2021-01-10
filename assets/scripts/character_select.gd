@@ -1,7 +1,113 @@
 extends Control
 
-var possible_characters
+var char1 = preload("res://assets/scenes/units/hamster.tscn")
+var char2 = preload("res://assets/scenes/units/bee.tscn")
+var char3 = preload("res://assets/scenes/units/hamster.tscn")
+var char4 = preload("res://assets/scenes/units/hamster.tscn")
+var char5 = preload("res://assets/scenes/units/hamster.tscn")
+var char6 = preload("res://assets/scenes/units/hamster.tscn")
+var char7 = preload("res://assets/scenes/units/hamster.tscn")
+var char8 = preload("res://assets/scenes/units/hamster.tscn")
+var char9 = preload("res://assets/scenes/units/hamster.tscn")
+var char10 = preload("res://assets/scenes/units/hamster.tscn")
 
+onready var num_selected = 0
+onready var selected_characters = []
+onready var selection_boxes = [
+	$selected/s1,
+	$selected/s2,
+	$selected/s3
+]
+
+onready var selection_map = {
+	"c1"  : false,
+	"c2"  : false,
+	"c3"  : false,
+	"c4"  : false,
+	"c5"  : false,
+	"c6"  : false,
+	"c7"  : false,
+	"c8"  : false,
+	"c9"  : false,
+	"c10" : false
+}
+
+
+onready var cmap = {
+	"c1" : char1,
+	"c2" : char2,
+	"c3" : char3,
+	"c4" : char4,
+	"c5" : char5,
+	"c6" : char6,
+	"c7" : char7,
+	"c8" : char8,
+	"c9" : char9,
+	"c10" : char10
+}
+
+onready var button_map = {
+	"c1"  : $GridContainer/c1,
+	"c2"  : $GridContainer/c2,
+	"c3"  : $GridContainer/c3,
+	"c4"  : $GridContainer/c4,
+	"c5"  : $GridContainer/c5,
+	"c6"  : $GridContainer/c6,
+	"c7"  : $GridContainer/c7,
+	"c8"  : $GridContainer/c8,
+	"c9"  : $GridContainer/c9,
+	"c10" : $GridContainer/c10
+}
+
+func _ready():
+	for c in button_map:
+		button_map[c].connect("pressed", self, "_some_button_pressed", [button_map[c]])
+		
+func _some_button_pressed(button):
+	toggle_button(button.name)
+	
 func _input(event : InputEvent):
+	if event.is_action("ui_left"):
+		pass
+	elif event.is_action("ui_right"):
+		pass
 	if event.is_action_pressed("ui_accept"):
 		get_tree().change_scene("res://assets/scenes/game.tscn")
+		
+	
+
+
+func toggle_button(button_id):
+	if num_selected < 3 and not selection_map[button_id] and not button_id in selected_characters:
+		selection_map[button_id] = true
+		num_selected += 1
+		selected_characters.append(button_id)
+	elif selection_map[button_id]:
+		selection_map[button_id] = false
+		num_selected -= 1
+		selected_characters.erase(button_id)
+	update_selection_box()
+
+func update_selection_box():
+	clear_selections()
+	var desired_size = Vector2(128, 128)
+	var actual_size = Vector2(200, 200)
+	var scale_vector = desired_size / actual_size
+	for i in range(len(selected_characters)):
+		selection_boxes[i].set_texture(load(button_map[selected_characters[i]].get_normal_texture().resource_path))
+		selection_boxes[i].scale = scale_vector
+
+func clear_selections():
+	for selection in selection_boxes:
+		selection.set_texture(null)	
+
+func _on_back_pressed():
+	get_tree().change_scene("res://assets/scenes/main_menu.tscn")
+
+func _on_forward_pressed():
+	var characters = []
+	for c in selected_characters:
+		characters.append(cmap[c].instance())
+	Globals.player_characters = characters
+	get_tree().change_scene("res://assets/scenes/game.tscn")
+	

@@ -12,7 +12,10 @@ var atk : int = 2
 var def : int = 1
 var mov : int = 2
 
+var abilities : Array
+
 func _ready() -> void:
+	abilities.append(Globals.ability_map["bash"])
 	for child in get_children():
 		if child is AnimatedSprite or child is Sprite:
 			sprite = child
