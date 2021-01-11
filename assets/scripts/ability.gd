@@ -36,9 +36,16 @@ var debuff : int
 # Size of AoE of ability (AoE = 1 for singular target) in tiles
 var aoe : int
 
-# Accuracy (% to hit )
-var accuracy : int
-
 # Tooltip/description of ability
 var description : String
-#
+
+func _init(dmg, angle, ability_range, aoe_type, aoe, target, debuff):
+	damage = dmg
+	range_angle = angle
+	ability_range = ability_range
+	aoe_type = aoe_type
+	aoe = aoe
+	target = target
+	debuff = debuff
+	description = "Does " + str(dmg) + " damage"	
+	
