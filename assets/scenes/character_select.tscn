@@ -1,28 +1,20 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/scripts/character_select.gd" type="Script" id=1]
 [ext_resource path="res://assets/graphics/backgrounds/character_select.png" type="Texture" id=2]
 [ext_resource path="res://assets/graphics/character_select/char2.png" type="Texture" id=3]
 [ext_resource path="res://assets/graphics/character_select/char6.png" type="Texture" id=4]
-[ext_resource path="res://assets/graphics/character_select/char9.png" type="Texture" id=5]
 [ext_resource path="res://assets/graphics/character_select/back.png" type="Texture" id=6]
 [ext_resource path="res://assets/graphics/character_select/char1.png" type="Texture" id=7]
-[ext_resource path="res://assets/graphics/character_select/char7.png" type="Texture" id=8]
 [ext_resource path="res://assets/graphics/character_select/char5.png" type="Texture" id=9]
-[ext_resource path="res://assets/graphics/character_select/char10.png" type="Texture" id=10]
 [ext_resource path="res://assets/graphics/character_select/char4.png" type="Texture" id=11]
 [ext_resource path="res://assets/graphics/character_select/char3.png" type="Texture" id=12]
 [ext_resource path="res://assets/graphics/character_select/forward.png" type="Texture" id=13]
-[ext_resource path="res://assets/graphics/character_select/char8.png" type="Texture" id=14]
 [ext_resource path="res://assets/graphics/character_select/selection.png" type="Texture" id=15]
 [ext_resource path="res://assets/graphics/character_select/char3on.png" type="Texture" id=16]
-[ext_resource path="res://assets/graphics/character_select/char7on.png" type="Texture" id=17]
 [ext_resource path="res://assets/graphics/character_select/char6on.png" type="Texture" id=18]
 [ext_resource path="res://assets/graphics/character_select/char2on.png" type="Texture" id=19]
-[ext_resource path="res://assets/graphics/character_select/char9on.png" type="Texture" id=20]
 [ext_resource path="res://assets/graphics/character_select/char4on.png" type="Texture" id=21]
-[ext_resource path="res://assets/graphics/character_select/char10on.png" type="Texture" id=22]
-[ext_resource path="res://assets/graphics/character_select/char8on.png" type="Texture" id=23]
 [ext_resource path="res://assets/graphics/character_select/char1on.png" type="Texture" id=24]
 [ext_resource path="res://assets/graphics/character_select/char5on.png" type="Texture" id=25]
 [ext_resource path="res://assets/graphics/character_select/highlight0.png" type="Texture" id=26]
@@ -106,12 +98,12 @@ position = Vector2( 256, 0 )
 centered = false
 
 [node name="GridContainer" type="GridContainer" parent="."]
-margin_left = 81.2
+margin_left = 81.0
 margin_top = 70.0
-margin_right = 1097.2
+margin_right = 689.0
 margin_bottom = 474.0
 rect_scale = Vector2( 1.1, 1.1 )
-columns = 5
+columns = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -140,70 +132,36 @@ texture_normal = ExtResource( 12 )
 texture_pressed = ExtResource( 16 )
 
 [node name="c4" type="TextureButton" parent="GridContainer"]
-margin_left = 612.0
-margin_right = 812.0
-margin_bottom = 200.0
+margin_top = 204.0
+margin_right = 200.0
+margin_bottom = 404.0
 toggle_mode = true
 texture_normal = ExtResource( 11 )
 texture_pressed = ExtResource( 21 )
 
 [node name="c5" type="TextureButton" parent="GridContainer"]
-margin_left = 816.0
-margin_right = 1016.0
-margin_bottom = 200.0
-toggle_mode = true
-texture_normal = ExtResource( 9 )
-texture_pressed = ExtResource( 25 )
-
-[node name="c6" type="TextureButton" parent="GridContainer"]
-margin_top = 204.0
-margin_right = 200.0
-margin_bottom = 404.0
-toggle_mode = true
-texture_normal = ExtResource( 4 )
-texture_pressed = ExtResource( 18 )
-
-[node name="c7" type="TextureButton" parent="GridContainer"]
 margin_left = 204.0
 margin_top = 204.0
 margin_right = 404.0
 margin_bottom = 404.0
 toggle_mode = true
-texture_normal = ExtResource( 8 )
-texture_pressed = ExtResource( 17 )
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 25 )
 
-[node name="c8" type="TextureButton" parent="GridContainer"]
+[node name="c6" type="TextureButton" parent="GridContainer"]
 margin_left = 408.0
 margin_top = 204.0
 margin_right = 608.0
 margin_bottom = 404.0
 toggle_mode = true
-texture_normal = ExtResource( 14 )
-texture_pressed = ExtResource( 23 )
-
-[node name="c9" type="TextureButton" parent="GridContainer"]
-margin_left = 612.0
-margin_top = 204.0
-margin_right = 812.0
-margin_bottom = 404.0
-toggle_mode = true
-texture_normal = ExtResource( 5 )
-texture_pressed = ExtResource( 20 )
-
-[node name="c10" type="TextureButton" parent="GridContainer"]
-margin_left = 816.0
-margin_top = 204.0
-margin_right = 1016.0
-margin_bottom = 404.0
-toggle_mode = true
-texture_normal = ExtResource( 10 )
-texture_pressed = ExtResource( 22 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 18 )
 
 [node name="highlight" type="AnimatedSprite" parent="GridContainer"]
+modulate = Color( 0.0235294, 0.0941176, 0.14902, 1 )
 position = Vector2( -0.181816, 0 )
 scale = Vector2( 0.999864, 0.999864 )
 frames = SubResource( 1 )
-frame = 1
 playing = true
 centered = false
 [connection signal="pressed" from="back" to="." method="_on_back_pressed"]

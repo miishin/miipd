@@ -6,10 +6,6 @@ var char3 = preload("res://assets/scenes/units/hamster.tscn")
 var char4 = preload("res://assets/scenes/units/hamster.tscn")
 var char5 = preload("res://assets/scenes/units/hamster.tscn")
 var char6 = preload("res://assets/scenes/units/hamster.tscn")
-var char7 = preload("res://assets/scenes/units/hamster.tscn")
-var char8 = preload("res://assets/scenes/units/hamster.tscn")
-var char9 = preload("res://assets/scenes/units/hamster.tscn")
-var char10 = preload("res://assets/scenes/units/hamster.tscn")
 
 onready var num_selected = 0
 onready var selected_characters = []
@@ -26,10 +22,6 @@ onready var selection_map = {
 	"c4"  : false,
 	"c5"  : false,
 	"c6"  : false,
-	"c7"  : false,
-	"c8"  : false,
-	"c9"  : false,
-	"c10" : false
 }
 
 
@@ -40,10 +32,6 @@ onready var cmap = {
 	"c4" : char4,
 	"c5" : char5,
 	"c6" : char6,
-	"c7" : char7,
-	"c8" : char8,
-	"c9" : char9,
-	"c10" : char10
 }
 
 onready var button_map = {
@@ -53,19 +41,17 @@ onready var button_map = {
 	"c4"  : $GridContainer/c4,
 	"c5"  : $GridContainer/c5,
 	"c6"  : $GridContainer/c6,
-	"c7"  : $GridContainer/c7,
-	"c8"  : $GridContainer/c8,
-	"c9"  : $GridContainer/c9,
-	"c10" : $GridContainer/c10
 }
 
 var all_buttons : Array
 var button_grid : Array
 var current_selection : Vector2
 
+const ROW_SIZE = 3
+
 func _ready():
 	all_buttons = button_map.keys()
-	button_grid = [all_buttons.slice(0, 4), all_buttons.slice(5, 9), [$back, $forward]]
+	button_grid = [all_buttons.slice(0, ROW_SIZE - 1), all_buttons.slice(ROW_SIZE, 2 * ROW_SIZE - 1), [$back, $forward]]
 	for c in button_map:
 		button_map[c].connect("pressed", self, "_some_button_pressed", [button_map[c]])
 	current_selection = Vector2(0, 0)
@@ -98,12 +84,12 @@ func _input(event : InputEvent):
 # Updates the currently selected button (keyboard)
 func update_selection():
 	current_selection.x = clamp(current_selection.x, 0, 2)
-	current_selection.y = clamp(current_selection.y, 0, 4)
+	current_selection.y = clamp(current_selection.y, 0, ROW_SIZE - 1)
 	if current_selection.x != 2:
 		$GridContainer/highlight.position = _convert_pos(current_selection)
 		$GridContainer/highlight.scale = Vector2(1, 1)
 	else:
-		if current_selection.y <= 3:
+		if current_selection.y < 1:
 			$GridContainer/highlight.position = Vector2(0, 455)
 		else:
 			$GridContainer/highlight.position = Vector2(834, 455)
