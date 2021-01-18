@@ -59,34 +59,81 @@ onready var button_map = {
 	"c10" : $GridContainer/c10
 }
 
+var all_buttons : Array
+var button_grid : Array
+var current_selection : Vector2
+
 func _ready():
+	all_buttons = button_map.keys()
+	button_grid = [all_buttons.slice(0, 4), all_buttons.slice(5, 9), [$back, $forward]]
 	for c in button_map:
 		button_map[c].connect("pressed", self, "_some_button_pressed", [button_map[c]])
+	current_selection = Vector2(0, 0)
+	update_selection()
 		
 func _some_button_pressed(button):
 	toggle_button(button.name)
+
 	
 func _input(event : InputEvent):
-	if event.is_action("ui_left"):
-		pass
-	elif event.is_action("ui_right"):
-		pass
-	if event.is_action_pressed("ui_accept"):
-		get_tree().change_scene("res://assets/scenes/game.tscn")
-		
+	if event.is_action_pressed("ui_left"):
+		current_selection += Vector2(0, -1)
+	elif event.is_action_pressed("ui_right"):
+		current_selection += Vector2(0, 1)
+	elif event.is_action_pressed("ui_up"):
+		current_selection += Vector2(-1, 0)
+	elif event.is_action_pressed("ui_down"):
+		current_selection += Vector2(1, 0)
+	elif event.is_action_pressed("ui_select"):
+		if current_selection.x == 2:
+			if current_selection.y <= 2:
+				_on_back_pressed()
+			else:
+				_on_forward_pressed()
+		else:
+			toggle_button(button_grid[current_selection.x][current_selection.y])
+	update_selection()
+	update_selection_box()
+	
+# Updates the currently selected button (keyboard)
+func update_selection():
+	current_selection.x = clamp(current_selection.x, 0, 2)
+	current_selection.y = clamp(current_selection.y, 0, 4)
+	if current_selection.x != 2:
+		$GridContainer/highlight.position = _convert_pos(current_selection)
+		$GridContainer/highlight.scale = Vector2(1, 1)
+	else:
+		if current_selection.y <= 3:
+			$GridContainer/highlight.position = Vector2(0, 455)
+		else:
+			$GridContainer/highlight.position = Vector2(834, 455)
+		$GridContainer/highlight.scale = Vector2(.91, 0.454)
+
+# Pos on button grid to pos on screen
+func _convert_pos(pos : Vector2):
+	#0, 0 = 81, 70. + 204 for xy
+	return Vector2(pos.y * 204, pos.x * 204)
 	
 
-
 func toggle_button(button_id):
-	if num_selected < 3 and not selection_map[button_id] and not button_id in selected_characters:
-		selection_map[button_id] = true
-		num_selected += 1
-		selected_characters.append(button_id)
-	elif selection_map[button_id]:
+	if selection_map[button_id]:
+		if num_selected == 3:
+			for id in button_map:
+				button_map[id].disabled = false
 		selection_map[button_id] = false
 		num_selected -= 1
 		selected_characters.erase(button_id)
+	else:
+		if num_selected < 3:
+			selection_map[button_id] = true
+			num_selected += 1
+			selected_characters.append(button_id)
+		if num_selected == 3:
+			for id in button_map:
+				if not id in selected_characters:
+					button_map[id].disabled = true
 	update_selection_box()
+
 
 func update_selection_box():
 	clear_selections()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://assets/scripts/character_select.gd" type="Script" id=1]
 [ext_resource path="res://assets/graphics/backgrounds/character_select.png" type="Texture" id=2]
@@ -25,6 +25,16 @@
 [ext_resource path="res://assets/graphics/character_select/char8on.png" type="Texture" id=23]
 [ext_resource path="res://assets/graphics/character_select/char1on.png" type="Texture" id=24]
 [ext_resource path="res://assets/graphics/character_select/char5on.png" type="Texture" id=25]
+[ext_resource path="res://assets/graphics/character_select/highlight0.png" type="Texture" id=26]
+[ext_resource path="res://assets/graphics/character_select/highlight1.png" type="Texture" id=27]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 26 ), ExtResource( 27 ) ],
+"loop": true,
+"name": "default",
+"speed": 1.0
+} ]
 
 [node name="CharacterSelect" type="Control"]
 anchor_right = 1.0
@@ -43,6 +53,57 @@ texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="back" type="TextureButton" parent="."]
+margin_left = 81.2
+margin_top = 570.0
+margin_right = 281.2
+margin_bottom = 670.0
+texture_normal = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="forward" type="TextureButton" parent="."]
+margin_left = 999.0
+margin_top = 570.0
+margin_right = 1199.0
+margin_bottom = 670.0
+texture_normal = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="selectionbg" type="TextureRect" parent="."]
+margin_left = 440.0
+margin_top = 550.0
+margin_right = 840.0
+margin_bottom = 678.0
+texture = ExtResource( 15 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="selected" type="HBoxContainer" parent="."]
+margin_left = 440.0
+margin_top = 550.0
+margin_right = 840.0
+margin_bottom = 678.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="s1" type="Sprite" parent="selected"]
+centered = false
+
+[node name="s2" type="Sprite" parent="selected"]
+position = Vector2( 128, 0 )
+centered = false
+
+[node name="s3" type="Sprite" parent="selected"]
+position = Vector2( 256, 0 )
+centered = false
 
 [node name="GridContainer" type="GridContainer" parent="."]
 margin_left = 81.2
@@ -138,55 +199,12 @@ toggle_mode = true
 texture_normal = ExtResource( 10 )
 texture_pressed = ExtResource( 22 )
 
-[node name="back" type="TextureButton" parent="."]
-margin_left = 81.2
-margin_top = 570.0
-margin_right = 281.2
-margin_bottom = 670.0
-texture_normal = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="forward" type="TextureButton" parent="."]
-margin_left = 999.0
-margin_top = 570.0
-margin_right = 1199.0
-margin_bottom = 670.0
-texture_normal = ExtResource( 13 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="selectionbg" type="TextureRect" parent="."]
-margin_left = 440.0
-margin_top = 550.0
-margin_right = 840.0
-margin_bottom = 678.0
-texture = ExtResource( 15 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="selected" type="HBoxContainer" parent="."]
-margin_left = 440.0
-margin_top = 550.0
-margin_right = 840.0
-margin_bottom = 678.0
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="s1" type="Sprite" parent="selected"]
-centered = false
-
-[node name="s2" type="Sprite" parent="selected"]
-position = Vector2( 128, 0 )
-centered = false
-
-[node name="s3" type="Sprite" parent="selected"]
-position = Vector2( 256, 0 )
+[node name="highlight" type="AnimatedSprite" parent="GridContainer"]
+position = Vector2( -0.181816, 0 )
+scale = Vector2( 0.999864, 0.999864 )
+frames = SubResource( 1 )
+frame = 1
+playing = true
 centered = false
 [connection signal="pressed" from="back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="forward" to="." method="_on_forward_pressed"]
