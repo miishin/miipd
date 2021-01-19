@@ -1,6 +1,9 @@
 extends Node2D
 class_name Tile
 
+const NORMAL_HIGHLIGHT = Color8(67, 71, 255, 255)
+const RED_HIGHLIGHT = Color8(255, 0, 0, 255)
+
 # Position of Tile (on Board)
 var pos
 
@@ -44,8 +47,9 @@ func get_neighbors() -> Array:
 func is_passable() -> bool:
 	return passable
 	
-func highlight() -> void:
+func highlight(color : Color = NORMAL_HIGHLIGHT) -> void:
 	$Highlight.visible = true
+	$Highlight.modulate = color
 	
 func unhighlight() -> void:
 	$Highlight.visible = false

@@ -57,23 +57,28 @@ func get_neighbors(pos : Vector2) -> Array:
 	var tile = tiles[pos.x][pos.y]
 	return tile.get_neighbors()
 
-# Returns a list of all tiles accessible from the given tile within 
-# a given Manhattan distance
-func find_accessible_tiles(tile : Tile, distance : int) -> Array:
+func find_accessible(tile : Tile, min_distance : int, max_distance : int, ignore_passable : bool = false) -> Array:
 	var accessible_tiles = []
-	for dx in range(-distance, distance + 1):
+	for dx in range(-max_distance, max_distance + 1):
 		var x = (dx + tile.pos.x)
 		if x < 0 or x >= len(tiles):
 			continue
-		for dy in range(-distance, distance + 1):
-			if abs(dx) + abs(dy) > distance:
+		for dy in range(-max_distance, max_distance + 1):
+			var dist = abs(dx) + abs(dy)
+			if dist > max_distance or dist < min_distance:
 				continue
 			var y = (dy + tile.pos.y)
 			if y < 0 or y >= len(tiles):
 				continue
-			if tiles[x][y].is_passable() and len(pathfinder(tiles[x][y], tile, distance)) > 0:
+			if ignore_passable or (tiles[x][y].is_passable() and \
+				 len(pathfinder(tiles[x][y], tile, max_distance)) > 0):
 				accessible_tiles.append(tiles[x][y])
 	return accessible_tiles
+
+# Returns a list of all tiles accessible from the given tile within 
+# a given Manhattan distance
+func find_accessible_tiles(tile : Tile, distance : int) -> Array:
+	return find_accessible(tile, 0, distance)
 
 # Returns the list of tiles that make up a path from an origin tile to a goal tile.
 func pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
@@ -88,16 +93,27 @@ func pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
 				return [origin] + neighbor_path
 	return []
 
+func highlight_range(origin : Tile, ability : Ability):
+	highlight_tiles(find_accessible(origin, ability.ability_range.x, ability.ability_range.y, true))
+
+func unhighlight_range(origin : Tile, ability : Ability):
+	unhighlight_tiles(find_accessible(origin, ability.ability_range.x, ability.ability_range.y, true))
+
 # Highlights the given tiles
-func hightlight_tiles(tile_list : Array) -> void:
+func highlight_tiles(tile_list : Array, color : Color = Tile.NORMAL_HIGHLIGHT) -> void:
 	for tile in tile_list:
-		tile.highlight()
+		tile.highlight(color)
 
 # Un-highlights the given tiles
 func unhighlight_tiles(tile_list : Array) -> void:
 	for tile in tile_list:
 		tile.unhighlight()
-		
+
+func unhighlight_all() -> void:
+	for row in tiles:
+		for tile in row:
+			tile.unhighlight()
+
 # Converts from the coordinate on the board to the coordinate
 # on the screen. 
 # One tile in the x direction = +62.5x, +31y

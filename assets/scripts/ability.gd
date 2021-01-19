@@ -39,13 +39,16 @@ var aoe : int
 # Tooltip/description of ability
 var description : String
 
-func _init(dmg, angle, ability_range, aoe_type, aoe, target, debuff):
+# Name of the ability
+var title : String
+
+func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_enum):
+	title = name
 	damage = dmg
 	range_angle = angle
-	ability_range = ability_range
-	aoe_type = aoe_type
-	aoe = aoe
-	target = target
-	debuff = debuff
+	ability_range = ab_range
+	aoe_type = aoe_enum
+	aoe = aoe_range
+	target = target_enum
+	debuff = debuff_enum
 	description = "Does " + str(dmg) + " damage"	
-	

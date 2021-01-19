@@ -26,12 +26,42 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fight" type="Button" parent="Menu"]
+[node name="Ability1" type="Button" parent="Menu"]
 margin_left = 80.0
 margin_top = 28.0
 margin_right = 256.0
 margin_bottom = 48.0
-text = "Fight"
+text = "Ability1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ability2" type="Button" parent="Menu"]
+margin_left = 80.0
+margin_top = 48.0
+margin_right = 256.0
+margin_bottom = 68.0
+text = "Ability2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ability3" type="Button" parent="Menu"]
+margin_left = 80.0
+margin_top = 68.0
+margin_right = 256.0
+margin_bottom = 88.0
+text = "Ability3"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EndTurn" type="Button" parent="Menu"]
+margin_left = 80.0
+margin_top = 68.0
+margin_right = 256.0
+margin_bottom = 88.0
+text = "End Turn"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -122,7 +152,10 @@ text = "0"
 [node name="TurnQueue" type="Node2D" parent="."]
 position = Vector2( -370.8, 624 )
 script = ExtResource( 6 )
-[connection signal="fight" from="." to="." method="fight"]
+[connection signal="ability" from="." to="." method="ability"]
 [connection signal="move" from="." to="." method="move"]
 [connection signal="button_down" from="Menu/Move" to="." method="_on_move_button_down"]
-[connection signal="button_down" from="Menu/Fight" to="." method="_on_fight_button_down"]
+[connection signal="button_down" from="Menu/Ability1" to="." method="_on_ability_down" binds= [ 0 ]]
+[connection signal="button_down" from="Menu/Ability2" to="." method="_on_ability_down" binds= [ 1 ]]
+[connection signal="button_down" from="Menu/Ability3" to="." method="_on_ability_down" binds= [ 2 ]]
+[connection signal="button_down" from="Menu/EndTurn" to="." method="_on_end_turn_button_down"]

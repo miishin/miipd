@@ -2,6 +2,7 @@ extends Node2D
 class_name GameWindow
 
 const hamster = preload("res://assets/scenes/units/hamster.tscn")
+const MAX_ABILITIES = 3
 
 var board : Board
 
@@ -15,10 +16,14 @@ var player_units    : Array
 var signal_callback : String
 var current_unit    : Unit
 
-var cursor_pos = Vector2(0, 0)
+var signal_args = []
+var turn_state  = []
+var cursor_pos  = Vector2(0, 0)
 
+# warning-ignore:unused_signal
 signal move
-signal fight
+# warning-ignore:unused_signal
+signal ability
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -63,6 +68,7 @@ func init(units: Array) -> void:
 	current_unit = turn_queue[0]
 	if current_unit in player_units:
 		player_turn = true
+		load_ability_menu()
 	else:
 		ai_turn()
 	
@@ -79,8 +85,6 @@ func _input(event: InputEvent) -> void:
 		$Menu.current_selection = 0
 		$Menu._move_cursor()
 		$Menu.show()
-		board.hightlight_tiles(board.find_accessible_tiles(
-			board.tiles[cursor_pos.x][cursor_pos.y], current_unit.mov))
 		return
 	if event.is_action_pressed("ui_cancel"):
 		$Menu.hide()
@@ -90,13 +94,10 @@ func _input(event: InputEvent) -> void:
 	place_cursor()
 
 func perform_action() -> void:
-	emit_signal(signal_callback)
+	emit_signal(signal_callback, signal_args)
 	$Cursor.visible = false
 	if next:
-		player_turn = false
-		next = false
-		board.get_tile(cursor_pos).deselect()
-		update_gamestate()
+		change_turn()
 
 func is_stage_over():
 	return len(board.enemy_units) == 0
@@ -113,6 +114,7 @@ func update_turn_queue() -> void:
 	var last_unit = turn_queue.pop_front()
 	turn_queue.push_back(last_unit)
 	current_unit = turn_queue[0]
+	load_ability_menu()
 	
 	last_unit = $TurnQueue.units.pop_front()
 	$TurnQueue.units.push_back(last_unit)
@@ -121,6 +123,16 @@ func update_turn_queue() -> void:
 	if not (current_unit in player_units):
 		ai_turn()
 	player_turn = true
+
+func load_ability_menu() -> void:
+	var abilities = current_unit.abilities
+	for i in range(MAX_ABILITIES):
+		var ability_button = get_node("Menu/VBoxContainer/Ability" + str(i + 1))
+		if i < len(abilities):
+			$Menu.show_button(i + 1)
+			ability_button.text = abilities[i].title
+		else:
+			$Menu.hide_button(i + 1)
 
 func ai_turn() -> void:
 	var closest_player = closest_unit(current_unit.occupied_tile, player_units)
@@ -205,13 +217,44 @@ func update_hud() -> void:
 	$HUD/Stats/SPDVal.text = str(unit.spd)
 	$HUD.show()
 
+func _on_ability_down(num : int):
+	action = true
+	signal_callback = "ability"
+	signal_args.clear()
+	signal_args.append(num)
+	board.unhighlight_all()
+	board.highlight_range(board.get_tile(cursor_pos), current_unit.abilities[num])
+	$Menu.hide()
+
 func _on_move_button_down() -> void:
 	action = true
 	signal_callback = "move"
+	board.unhighlight_all()
+	board.highlight_tiles(board.find_accessible_tiles(
+		board.get_tile(cursor_pos), current_unit.mov))
 	$Menu.hide()
 
-func move() -> void:
-	if not board.get_tile(cursor_pos).is_highlighted():
+func _on_end_turn_button_down():
+	change_turn()
+	$Menu.hide()
+
+func change_turn():
+	player_turn = false
+	next = false
+	turn_state.clear()
+	board.get_tile(cursor_pos).deselect()
+	$Menu/VBoxContainer/Move.disabled = false
+	board.unhighlight_all()
+	enable_abilities()
+	update_gamestate()
+
+func update_turn_state(action_str : String) -> void:
+	turn_state.append(action_str)
+	if len(turn_state) == 2:
+		next = true
+
+func move(_args : Array) -> void:
+	if not board.get_tile(cursor_pos).is_highlighted() or signal_callback in turn_state:
 		return
 	var unit_tile = board.get_tile(current_unit.occupied_tile)
 	var tile_path = board.pathfinder(unit_tile, board.get_tile(cursor_pos), current_unit.mov)
@@ -222,23 +265,34 @@ func move() -> void:
 		Globals.yielded_animations.push_back(yielded)
 	current_unit.occupied_tile = cursor_pos
 	action = false
-	next = true
+	update_turn_state(signal_callback)
+	$Menu/VBoxContainer/Move.disabled = true
 
-func _on_fight_button_down() -> void:
-	action = true
-	signal_callback = "fight"
-	$Menu.hide()
+func ability(args : Array) -> void:
+	if signal_callback in turn_state:
+		return
+	var ability : Ability = current_unit.abilities[args[0]]
+	var tiles = board.find_accessible(board.get_tile(cursor_pos), 0, ability.aoe - 1)
+	board.highlight_tiles(tiles, Tile.RED_HIGHLIGHT) 
 
-func fight() -> void:
 	var enemy = board.get_enemy(cursor_pos)
 	if enemy:
 		var unit_tile = board.get_tile(current_unit.occupied_tile)
-		current_unit.fight(enemy)
+		enemy.apply(ability)
 		if enemy.dead():
 			remove_unit(enemy)
 		action = false
-		board.unhighlight_tiles(board.find_accessible_tiles(unit_tile, current_unit.mov))
-		next = true
+		board.unhighlight_range(unit_tile, ability)
+		update_turn_state(signal_callback)
+		disable_abilities()
+
+func disable_abilities():
+	for i in range(MAX_ABILITIES):
+		get_node("Menu/VBoxContainer/Ability" + str(i + 1)).disabled = true
+
+func enable_abilities():
+	for i in range(MAX_ABILITIES):
+		get_node("Menu/VBoxContainer/Ability" + str(i + 1)).disabled = false
 
 func remove_unit(unit : Unit):
 	if unit in board.enemy_units:
@@ -249,7 +303,3 @@ func remove_unit(unit : Unit):
 	turn_queue.erase(unit)
 	$TurnQueue.delete_unit(unit)
 	unit.queue_free()
-	
-	
-	
-	

@@ -3,11 +3,11 @@ class_name Unit
 
 const MOVE_TIME = 0.25
 
-var occupied_tile
+var occupied_tile : Vector2
 var sprite = null
 
 var spd : int = (randi() % 10) + 1
-var hp  : int = 1
+var hp  : int = 10
 var atk : int = 2
 var def : int = 1
 var mov : int = 2
@@ -16,6 +16,7 @@ var abilities : Array
 
 func _ready() -> void:
 	abilities.append(Globals.ability_map["bash"])
+	abilities.append(Globals.ability_map["slash"])
 	for child in get_children():
 		if child is AnimatedSprite or child is Sprite:
 			sprite = child
@@ -24,7 +25,10 @@ func _ready() -> void:
 func fight(other : Unit) -> void:
 	other.hp -= (self.atk - other.def)
 
-func move(start : Vector2, end : Vector2, delay = 0) -> void:
+func apply(ability: Ability):
+	hp -= (ability.damage  - def)
+
+func move(start : Vector2, end : Vector2, delay : float = 0) -> void:
 	$Tween.interpolate_property(self, "position",
 		start, end, MOVE_TIME,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, delay)
@@ -39,7 +43,7 @@ func move_path(positions: Array) -> void:
 		var start = self.position
 		if i > 0:
 			start = positions[i-1]
-		move(start, positions[i], i * MOVE_TIME) 
+		move(start, positions[i], i * MOVE_TIME)
 
 func get_size() -> Vector2:
 	if sprite is AnimatedSprite:
