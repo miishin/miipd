@@ -63,18 +63,26 @@ func _some_button_pressed(button):
 	
 func _input(event : InputEvent):
 	if event.is_action_pressed("ui_left"):
-		current_selection += Vector2(0, -1)
+		if current_selection.x == 2:
+			current_selection.y == 1
+		else:
+			current_selection += Vector2(0, -1)
 	elif event.is_action_pressed("ui_right"):
-		current_selection += Vector2(0, 1)
+		if current_selection.x == 2:
+			current_selection.y == 0
+		else:
+			current_selection += Vector2(0, 1)
 	elif event.is_action_pressed("ui_up"):
 		current_selection += Vector2(-1, 0)
 	elif event.is_action_pressed("ui_down"):
+		if current_selection.x == 1:
+			clamp(current_selection.y, 0, 1)
 		current_selection += Vector2(1, 0)
 	elif event.is_action_pressed("ui_select"):
 		if current_selection.x == 2:
-			if current_selection.y <= 2:
+			if current_selection.y == 0:
 				_on_back_pressed()
-			else:
+			elif current_selection.y == 1:
 				_on_forward_pressed()
 		else:
 			toggle_button(button_grid[current_selection.x][current_selection.y])
@@ -89,7 +97,7 @@ func update_selection():
 		$GridContainer/highlight.position = _convert_pos(current_selection)
 		$GridContainer/highlight.scale = Vector2(1, 1)
 	else:
-		if current_selection.y < 1:
+		if current_selection.y == 0:
 			$GridContainer/highlight.position = Vector2(0, 455)
 		else:
 			$GridContainer/highlight.position = Vector2(834, 455)
@@ -109,7 +117,9 @@ func toggle_button(button_id):
 		selection_map[button_id] = false
 		num_selected -= 1
 		selected_characters.erase(button_id)
+		button_map[button_id].set_pressed(false)
 	else:
+		button_map[button_id].set_pressed(true)
 		if num_selected < 3:
 			selection_map[button_id] = true
 			num_selected += 1
