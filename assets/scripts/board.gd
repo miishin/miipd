@@ -94,10 +94,10 @@ func pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
 	return []
 
 func highlight_range(origin : Tile, ability : Ability):
-	highlight_tiles(find_accessible(origin, ability.ability_range.x, ability.ability_range.y, true))
+	highlight_tiles(find_accessible(origin, int(ability.ability_range.x), int(ability.ability_range.y), true))
 
 func unhighlight_range(origin : Tile, ability : Ability):
-	unhighlight_tiles(find_accessible(origin, ability.ability_range.x, ability.ability_range.y, true))
+	unhighlight_tiles(find_accessible(origin, int(ability.ability_range.x), int(ability.ability_range.y), true))
 
 # Highlights the given tiles
 func highlight_tiles(tile_list : Array, color : Color = Tile.NORMAL_HIGHLIGHT) -> void:

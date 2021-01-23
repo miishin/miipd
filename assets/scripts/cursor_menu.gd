@@ -13,7 +13,7 @@ func _ready() -> void:
 	buttons[-1].focus_neighbour_bottom = buttons[0].get_path()
 	buttons[0].grab_focus()
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	var dir = 0
 	if Input.is_action_just_pressed("ui_down"): 
 		dir += 1

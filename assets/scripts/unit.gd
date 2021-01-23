@@ -61,7 +61,7 @@ func clone() -> Unit:
 	dup.add_child(dup.sprite.duplicate())
 	return dup
 
-func _on_tween_completed(object, key):
+func _on_tween_completed(_object, _key):
 	Globals.tween_count -= 1
 	if Globals.tween_count == 0:
 		Globals.playing = false

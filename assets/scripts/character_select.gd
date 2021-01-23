@@ -64,12 +64,12 @@ func _some_button_pressed(button):
 func _input(event : InputEvent):
 	if event.is_action_pressed("ui_left"):
 		if current_selection.x == 2:
-			current_selection.y == 1
+			current_selection.y = 1
 		else:
 			current_selection += Vector2(0, -1)
 	elif event.is_action_pressed("ui_right"):
 		if current_selection.x == 2:
-			current_selection.y == 0
+			current_selection.y = 0
 		else:
 			current_selection += Vector2(0, 1)
 	elif event.is_action_pressed("ui_up"):

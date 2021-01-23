@@ -20,7 +20,6 @@ var signal_args = []
 var turn_state  = []
 var cursor_pos  = Vector2(0, 0)
 
-var paused = false
 # warning-ignore:unused_signal
 signal move
 # warning-ignore:unused_signal
@@ -76,26 +75,24 @@ func init(units: Array) -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		print(":3")
-		$pausemenu.popup()
-		paused = !paused
-		$Menu.paused = !$Menu.paused
-	if paused:
+		$CanvasLayer/PauseMenu.pause()
+	if $CanvasLayer/PauseMenu.paused:
 		return
 	if !player_turn:
 		return
-	if $Menu.is_visible():
+	if $CanvasLayer/Menu.is_visible():
 		return
 	if action and event.is_action_pressed("ui_accept"):
 		perform_action()
 		return
 	if event.is_action_pressed("ui_select") and cursor_pos == current_unit.occupied_tile:
-		$Menu.buttons[0].grab_focus()
-		$Menu.current_selection = 0
-		$Menu._move_cursor()
-		$Menu.show()
+		$CanvasLayer/Menu.buttons[0].grab_focus()
+		$CanvasLayer/Menu.current_selection = 0
+		$CanvasLayer/Menu._move_cursor()
+		$CanvasLayer/Menu.show()
 		return
 	if event.is_action_pressed("ui_cancel"):
-		$Menu.hide()
+		$CanvasLayer/Menu.hide()
 		return
 	move_cursor()
 	place_cursor()
@@ -134,12 +131,12 @@ func update_turn_queue() -> void:
 func load_ability_menu() -> void:
 	var abilities = current_unit.abilities
 	for i in range(MAX_ABILITIES):
-		var ability_button = get_node("Menu/VBoxContainer/Ability" + str(i + 1))
+		var ability_button = get_node("CanvasLayer/Menu/VBoxContainer/Ability" + str(i + 1))
 		if i < len(abilities):
-			$Menu.show_button(i + 1)
+			$CanvasLayer/Menu.show_button(i + 1)
 			ability_button.text = abilities[i].title
 		else:
-			$Menu.hide_button(i + 1)
+			$CanvasLayer/Menu.hide_button(i + 1)
 
 func ai_turn() -> void:
 	var closest_player = closest_unit(current_unit.occupied_tile, player_units)
@@ -215,14 +212,14 @@ func update_hud() -> void:
 		if u.occupied_tile == cursor_pos:
 			unit = u
 	if not unit:
-		$HUD.hide()
+		$CanvasLayer/HUD.hide()
 		return
 		
-	$HUD/Stats/ATKVal.text = str(unit.atk)
-	$HUD/Stats/HPVal.text = str(unit.hp)
-	$HUD/Stats/DEFVal.text = str(unit.def)
-	$HUD/Stats/SPDVal.text = str(unit.spd)
-	$HUD.show()
+	$CanvasLayer/HUD/Stats/ATKVal.text = str(unit.atk)
+	$CanvasLayer/HUD/Stats/HPVal.text = str(unit.hp)
+	$CanvasLayer/HUD/Stats/DEFVal.text = str(unit.def)
+	$CanvasLayer/HUD/Stats/SPDVal.text = str(unit.spd)
+	$CanvasLayer/HUD.show()
 
 func _on_ability_down(num : int):
 	action = true
@@ -231,7 +228,7 @@ func _on_ability_down(num : int):
 	signal_args.append(num)
 	board.unhighlight_all()
 	board.highlight_range(board.get_tile(cursor_pos), current_unit.abilities[num])
-	$Menu.hide()
+	$CanvasLayer/Menu.hide()
 
 func _on_move_button_down() -> void:
 	action = true
@@ -239,18 +236,18 @@ func _on_move_button_down() -> void:
 	board.unhighlight_all()
 	board.highlight_tiles(board.find_accessible_tiles(
 		board.get_tile(cursor_pos), current_unit.mov))
-	$Menu.hide()
+	$CanvasLayer/Menu.hide()
 
 func _on_end_turn_button_down():
 	change_turn()
-	$Menu.hide()
+	$CanvasLayer/Menu.hide()
 
 func change_turn():
 	player_turn = false
 	next = false
 	turn_state.clear()
 	board.get_tile(cursor_pos).deselect()
-	$Menu/VBoxContainer/Move.disabled = false
+	$CanvasLayer/Menu/VBoxContainer/Move.disabled = false
 	board.unhighlight_all()
 	enable_abilities()
 	update_gamestate()
@@ -273,7 +270,7 @@ func move(_args : Array) -> void:
 	current_unit.occupied_tile = cursor_pos
 	action = false
 	update_turn_state(signal_callback)
-	$Menu/VBoxContainer/Move.disabled = true
+	$CanvasLayer/Menu/VBoxContainer/Move.disabled = true
 
 func ability(args : Array) -> void:
 	if signal_callback in turn_state:
@@ -295,11 +292,11 @@ func ability(args : Array) -> void:
 
 func disable_abilities():
 	for i in range(MAX_ABILITIES):
-		get_node("Menu/VBoxContainer/Ability" + str(i + 1)).disabled = true
+		get_node("CanvasLayer/Menu/VBoxContainer/Ability" + str(i + 1)).disabled = true
 
 func enable_abilities():
 	for i in range(MAX_ABILITIES):
-		get_node("Menu/VBoxContainer/Ability" + str(i + 1)).disabled = false
+		get_node("CanvasLayer/Menu/VBoxContainer/Ability" + str(i + 1)).disabled = false
 
 func remove_unit(unit : Unit):
 	if unit in board.enemy_units:

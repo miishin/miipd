@@ -1,8 +1,10 @@
-extends Node2D
+extends Popup
 
 var option_texture = preload('res://assets/graphics/backgrounds/menu_option.png')
 var selected_option_texture = preload('res://assets/graphics/backgrounds/menu_option_selected.png')
+
 var selection : int
+var paused    : bool
 # 0 - resume
 # 1 - options
 # 2 - quit
@@ -10,39 +12,43 @@ var selection : int
 func _ready():
 	selection = 0
 	set_selection_color()
-	$menu.rect_position = Vector2(500, 210)
-	$menu.popup()
-	$menu.visible = false
+	rect_position = Vector2(500, 210)
+	popup()
+	visible = false
+	paused = false
 
 func reset_colors():
-	$menu/resume.texture = option_texture
-	$menu/options.texture = option_texture
-	$menu/quit.texture = option_texture
+	$Resume.texture = option_texture
+	$Options.texture = option_texture
+	$Quit.texture = option_texture
 
 func set_selection_color():
 	match selection:
 		0:
-			$menu/resume.texture = selected_option_texture
+			$Resume.texture = selected_option_texture
 		1:
-			$menu/options.texture = selected_option_texture
+			$Options.texture = selected_option_texture
 		2:
-			$menu/quit.texture = selected_option_texture
+			$Quit.texture = selected_option_texture
+
+func pause():
+	paused = !paused
+	visible = !visible
 
 func _input(event : InputEvent):
+	if !paused:
+		return
 	if event.is_action_pressed('ui_down'):
 		selection = (selection + 1) % 3
 	elif event.is_action_pressed('ui_up'):
-		selection = (selection - 1) % 3
+		selection = (selection + 2) % 3
 	elif event.is_action_pressed('ui_select'):
 		match selection:
 			0:
-				$menu.visible = false
+				pause()
 			1: 
 				print("open options")
 			2:
 				get_tree().quit()
-	elif event.is_action_pressed('pause'):
-		$menu.visible = !$menu.visible
-		selection = 0
 	reset_colors()
 	set_selection_color()

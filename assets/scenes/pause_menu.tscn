@@ -1,35 +1,32 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://assets/graphics/backgrounds/menu_option.png" type="Texture" id=1]
-[ext_resource path="res://assets/scripts/pausemenu.gd" type="Script" id=2]
+[ext_resource path="res://assets/scripts/pause_menu.gd" type="Script" id=2]
 
-[node name="pausemenu" type="Node2D"]
-script = ExtResource( 2 )
-
-[node name="menu" type="Popup" parent="."]
+[node name="PauseMenu" type="Popup"]
 pause_mode = 2
-visible = true
 margin_left = 500.0
 margin_top = 210.0
 margin_right = 800.0
 margin_bottom = 510.0
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="background" type="ColorRect" parent="menu"]
+[node name="Background" type="ColorRect" parent="."]
 margin_right = 300.0
 margin_bottom = 300.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="resume" type="Sprite" parent="menu"]
+[node name="Resume" type="Sprite" parent="."]
 position = Vector2( 25, 50 )
 texture = ExtResource( 1 )
 centered = false
 
-[node name="Label" type="Label" parent="menu/resume"]
+[node name="Label" type="Label" parent="Resume"]
 margin_right = 250.0
 margin_bottom = 40.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -40,12 +37,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="options" type="Sprite" parent="menu"]
+[node name="Options" type="Sprite" parent="."]
 position = Vector2( 25, 125 )
 texture = ExtResource( 1 )
 centered = false
 
-[node name="Label" type="Label" parent="menu/options"]
+[node name="Label" type="Label" parent="Options"]
 margin_right = 250.0
 margin_bottom = 40.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -56,12 +53,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="quit" type="Sprite" parent="menu"]
+[node name="Quit" type="Sprite" parent="."]
 position = Vector2( 25, 200 )
 texture = ExtResource( 1 )
 centered = false
 
-[node name="Label" type="Label" parent="menu/quit"]
+[node name="Label" type="Label" parent="Quit"]
 margin_right = 250.0
 margin_bottom = 40.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
