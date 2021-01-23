@@ -20,6 +20,7 @@ var signal_args = []
 var turn_state  = []
 var cursor_pos  = Vector2(0, 0)
 
+var paused = false
 # warning-ignore:unused_signal
 signal move
 # warning-ignore:unused_signal
@@ -73,6 +74,13 @@ func init(units: Array) -> void:
 		ai_turn()
 	
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		print(":3")
+		$pausemenu.popup()
+		paused = !paused
+		$Menu.paused = !$Menu.paused
+	if paused:
+		return
 	if !player_turn:
 		return
 	if $Menu.is_visible():
@@ -89,7 +97,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		$Menu.hide()
 		return
-	
 	move_cursor()
 	place_cursor()
 
