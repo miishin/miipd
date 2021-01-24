@@ -202,6 +202,12 @@ func place_cursor(show = false) -> void:
 	$Cursor.position.y -= 50
 	$Cursor.position.x -= 10
 	board.get_tile(cursor_pos).select()
+	if signal_callback == "ability":
+		highlight_ability_range(current_unit, signal_args[0])
+		if board.get_tile(cursor_pos).is_highlighted():
+			var ability : Ability = current_unit.abilities[signal_args[0]]
+			var tiles = board.find_accessible(board.get_tile(cursor_pos), 0, ability.aoe - 1)
+			board.highlight_tiles(tiles, Tile.RED_HIGHLIGHT) 
 	if show:
 		$Cursor.show()
 	update_hud()
@@ -226,9 +232,12 @@ func _on_ability_down(num : int):
 	signal_callback = "ability"
 	signal_args.clear()
 	signal_args.append(num)
-	board.unhighlight_all()
-	board.highlight_range(board.get_tile(cursor_pos), current_unit.abilities[num])
+	highlight_ability_range(current_unit, num)
 	$CanvasLayer/Menu.hide()
+
+func highlight_ability_range(unit : Unit, i : int):
+	board.unhighlight_all()
+	board.highlight_range(board.get_tile(unit.occupied_tile), unit.abilities[i])
 
 func _on_move_button_down() -> void:
 	action = true
@@ -245,6 +254,8 @@ func _on_end_turn_button_down():
 func change_turn():
 	player_turn = false
 	next = false
+	signal_callback = ""
+	signal_args = []
 	turn_state.clear()
 	board.get_tile(cursor_pos).deselect()
 	$CanvasLayer/Menu/VBoxContainer/Move.disabled = false
@@ -253,6 +264,8 @@ func change_turn():
 	update_gamestate()
 
 func update_turn_state(action_str : String) -> void:
+	signal_callback = ""
+	signal_args = []
 	turn_state.append(action_str)
 	if len(turn_state) == 2:
 		next = true
@@ -277,18 +290,17 @@ func ability(args : Array) -> void:
 		return
 	var ability : Ability = current_unit.abilities[args[0]]
 	var tiles = board.find_accessible(board.get_tile(cursor_pos), 0, ability.aoe - 1)
-	board.highlight_tiles(tiles, Tile.RED_HIGHLIGHT) 
-
-	var enemy = board.get_enemy(cursor_pos)
-	if enemy:
-		var unit_tile = board.get_tile(current_unit.occupied_tile)
-		enemy.apply(ability)
-		if enemy.dead():
-			remove_unit(enemy)
-		action = false
-		board.unhighlight_range(unit_tile, ability)
-		update_turn_state(signal_callback)
-		disable_abilities()
+	
+	for tile in tiles:
+		var enemy = board.get_enemy(tile.pos)
+		if enemy:
+			enemy.apply(ability)
+			if enemy.dead():
+				remove_unit(enemy)
+			action = false
+	board.unhighlight_all()
+	update_turn_state(signal_callback)
+	disable_abilities()
 
 func disable_abilities():
 	for i in range(MAX_ABILITIES):
