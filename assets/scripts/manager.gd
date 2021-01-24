@@ -74,7 +74,6 @@ func init(units: Array) -> void:
 	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
-		print(":3")
 		$CanvasLayer/PauseMenu.pause()
 	if $CanvasLayer/PauseMenu.paused:
 		return
