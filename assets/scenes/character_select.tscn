@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://assets/scripts/character_select.gd" type="Script" id=1]
 [ext_resource path="res://assets/graphics/backgrounds/character_select.png" type="Texture" id=2]
 [ext_resource path="res://assets/graphics/character_select/char2.png" type="Texture" id=3]
 [ext_resource path="res://assets/graphics/character_select/char6.png" type="Texture" id=4]
+[ext_resource path="res://assets/scenes/character_stats.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/graphics/character_select/back.png" type="Texture" id=6]
 [ext_resource path="res://assets/graphics/character_select/char1.png" type="Texture" id=7]
 [ext_resource path="res://assets/graphics/character_select/char5.png" type="Texture" id=9]
@@ -164,5 +165,11 @@ scale = Vector2( 0.999864, 0.999864 )
 frames = SubResource( 1 )
 playing = true
 centered = false
+
+[node name="Stats" parent="." instance=ExtResource( 5 )]
+margin_left = 755.0
+margin_top = 70.0
+margin_right = 755.0
+margin_bottom = 70.0
 [connection signal="pressed" from="back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="forward" to="." method="_on_forward_pressed"]

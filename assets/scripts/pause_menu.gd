@@ -19,7 +19,7 @@ func _ready():
 
 func reset_colors():
 	$Resume.texture = option_texture
-	$Options.texture = option_texture
+	$MainMenu.texture = option_texture
 	$Quit.texture = option_texture
 
 func set_selection_color():
@@ -27,7 +27,7 @@ func set_selection_color():
 		0:
 			$Resume.texture = selected_option_texture
 		1:
-			$Options.texture = selected_option_texture
+			$MainMenu.texture = selected_option_texture
 		2:
 			$Quit.texture = selected_option_texture
 
@@ -47,7 +47,7 @@ func _input(event : InputEvent):
 			0:
 				pause()
 			1: 
-				print("open options")
+				get_tree().change_scene("res://assets/scenes/main_menu.tscn")
 			2:
 				get_tree().quit()
 	reset_colors()

@@ -15,13 +15,16 @@ var mov : int = 2
 var abilities : Array
 
 func _ready() -> void:
-	abilities.append(Globals.ability_map["bash"])
-	abilities.append(Globals.ability_map["slash"])
+	init_abilities()
 	for child in get_children():
 		if child is AnimatedSprite or child is Sprite:
 			sprite = child
 			break
 
+func init_abilities():
+	abilities.append(Globals.ability_map["bash"])
+	abilities.append(Globals.ability_map["slash"])
+	
 func fight(other : Unit) -> void:
 	other.hp -= (self.atk - other.def)
 
