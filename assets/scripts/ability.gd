@@ -6,16 +6,17 @@ enum RangeAngle {PERPENDICULAR, DIAGONAL, FULL}
 
 # Type of AoE. If aoe size is n:
 # Circular: all tiles reachable in n tiles
-# Line: all tiles back towards caster (simulate a line aoe attack) aoe = range
+# Line: n tiles back towards the caster (n = aoe, negatives = away from caster)
+	# aoe = 0 denotes all the way back to the caster (to work with dynamic ranges). 
 # Perpendicular: n tiles in perpendicular directions
 # Diagonal: n tiles in diagonal directions
-enum AoEType {CIRCULAR, LINE, PERPENDICULAR, DIAGONAL}
+enum AoEType {CIRCULAR, LINE}
 
 # Whether this ability targets allies, enemies, or both
-enum AbilityTarget {ALLY, ENEMY, ALL}
+enum AbilityTarget {ALLY, ENEMY, ALL_UNITS, EMPTY, ALL}
 
 # The type of debuff this ability inflicts
-enum Debuff {NONE}
+enum Debuff {NONE, ROOT, CONSUMED}
 
 # How much damage this ability does
 # If AoE this is damage per tile
