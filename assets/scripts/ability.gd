@@ -10,7 +10,7 @@ enum RangeAngle {PERPENDICULAR, DIAGONAL, FULL}
 	# aoe = 0 denotes all the way back to the caster (to work with dynamic ranges). 
 # Perpendicular: n tiles in perpendicular directions
 # Diagonal: n tiles in diagonal directions
-enum AoEType {CIRCULAR, LINE}
+enum AoeType {CIRCULAR, LINE}
 
 # Whether this ability targets allies, enemies, or both
 enum AbilityTarget {ALLY, ENEMY, ALL_UNITS, EMPTY, ALL}
