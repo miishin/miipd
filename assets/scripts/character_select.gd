@@ -64,14 +64,12 @@ func _some_button_pressed(button):
 func _input(event : InputEvent):
 	if event.is_action_pressed("ui_left"):
 		if current_selection.x == 2:
-			current_selection.y = 1
-		else:
 			current_selection += Vector2(0, -1)
+		current_selection += Vector2(0, -1)
 	elif event.is_action_pressed("ui_right"):
 		if current_selection.x == 2:
-			current_selection.y = 0
-		else:
 			current_selection += Vector2(0, 1)
+		current_selection += Vector2(0, 1)
 	elif event.is_action_pressed("ui_up"):
 		current_selection += Vector2(-1, 0)
 	elif event.is_action_pressed("ui_down"):
@@ -88,7 +86,14 @@ func _input(event : InputEvent):
 			toggle_button(button_grid[current_selection.x][current_selection.y])
 	update_selection()
 	update_selection_box()
-	
+
+# Clears buttons (only necessary when people try to click buttons after 
+# selecting 3
+func clear_button_highlights():
+	for button in all_buttons:
+		if not button in selected_characters:
+			button_map[button].set_pressed(false)
+			
 # Updates the currently selected button (keyboard)
 func update_selection():
 	current_selection.x = clamp(current_selection.x, 0, 2)
@@ -129,7 +134,7 @@ func toggle_button(button_id):
 				if not id in selected_characters:
 					button_map[id].disabled = true
 	update_selection_box()
-
+	clear_button_highlights()
 
 func update_selection_box():
 	clear_selections()
