@@ -2,10 +2,10 @@ extends Control
 
 var char1 = preload("res://assets/scenes/units/hamster.tscn")
 var char2 = preload("res://assets/scenes/units/bee.tscn")
-var char3 = preload("res://assets/scenes/units/hamster.tscn")
-var char4 = preload("res://assets/scenes/units/hamster.tscn")
-var char5 = preload("res://assets/scenes/units/hamster.tscn")
-var char6 = preload("res://assets/scenes/units/hamster.tscn")
+var char3 = preload("res://assets/scenes/units/crab.tscn")
+var char4 = preload("res://assets/scenes/units/salamander.tscn")
+var char5 = preload("res://assets/scenes/units/birb.tscn")
+var char6 = preload("res://assets/scenes/units/turtle.tscn")
 
 onready var num_selected = 0
 onready var selected_characters = []
