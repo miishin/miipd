@@ -1,17 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/graphics/backgrounds/tileable_menu_bg.png" type="Texture" id=1]
-[ext_resource path="res://assets/graphics/sprites/default1.png" type="Texture" id=2]
-[ext_resource path="res://assets/graphics/sprites/default0.png" type="Texture" id=3]
 [ext_resource path="res://assets/scripts/character_stats.gd" type="Script" id=4]
 [ext_resource path="res://assets/graphics/abilities/bash.png" type="Texture" id=5]
-
-[sub_resource type="AnimatedTexture" id=1]
-frames = 2
-fps = 1.0
-frame_0/texture = ExtResource( 3 )
-frame_1/texture = ExtResource( 2 )
-frame_1/delay_sec = 0.0
 
 [node name="CharStats" type="Control"]
 script = ExtResource( 4 )
@@ -27,16 +18,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CharSprite" type="TextureRect" parent="."]
+[node name="CharSprite" type="Control" parent="."]
 margin_left = 15.0
 margin_top = 15.0
 margin_right = 237.0
 margin_bottom = 237.0
-texture = SubResource( 1 )
-expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CharSprite" type="AnimatedSprite" parent="CharSprite"]
+position = Vector2( 100, 100 )
 
 [node name="AbilityIcons" type="VBoxContainer" parent="."]
 margin_left = 50.0
