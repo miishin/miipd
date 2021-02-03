@@ -19,7 +19,6 @@ func load_unit(unit : Unit):
 	#_set_ability3(unit.abilities[2])
 	# This may not be correct, will test when all units have actual animatedsprites	
 	#$CharSprite.texture.set_frame_texture(0, unit.sprite.get_sprite_frames()[0])
-	#$CharSprite.texture.set_frame_texture(1, unit.sprite.get_sprite_frames()[1])
 	
 	
 func _set_hp(hp : int):
