@@ -8,7 +8,7 @@
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
-"name": "default",
+"name": "idle",
 "speed": 5.0
 } ]
 
@@ -17,5 +17,6 @@ scale = Vector2( 0.8, 0.8 )
 z_index = 2
 script = ExtResource( 3 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="1"]
+[node name="AnimatedSprite" parent="." index="1"]
 frames = SubResource( 1 )
+animation = "idle"

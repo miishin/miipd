@@ -12,6 +12,7 @@ func load_unit(unit : Unit):
 	#_set_ability2(unit.abilities[1])
 	#_set_ability3(unit.abilities[2])
 	$CharSprite/CharSprite.frames = unit.get_child(1).frames
+	$CharSprite/CharSprite.play("idle")
 	
 	
 func _set_hp(hp : int):
