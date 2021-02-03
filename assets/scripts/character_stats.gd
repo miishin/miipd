@@ -1,22 +1,16 @@
 extends Control
-var bee = preload("res://assets/scenes/units/bee.tscn")
-
-# Remove later.
-func _ready():
-	var b = bee.instance()
-	b.init_abilities()
-	load_unit(b)
 	
 # Takes in a unit and sets this windows data accordingly
 func load_unit(unit : Unit):
+	print(unit)
 	_set_hp(unit.hp)
 	_set_atk(unit.atk)
 	_set_def(unit.def)
 	_set_spd(unit.spd)
 	_set_mov(unit.mov)
-	_set_ability1(unit.abilities[0])
-	_set_ability2(unit.abilities[1])
-	_set_ability3(unit.abilities[2])
+	#_set_ability1(unit.abilities[0])
+	#_set_ability2(unit.abilities[1])
+	#_set_ability3(unit.abilities[2])
 	$CharSprite/CharSprite.frames = unit.get_child(1).frames
 	
 	

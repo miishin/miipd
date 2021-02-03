@@ -101,6 +101,7 @@ func update_selection():
 	if current_selection.x != 2:
 		$GridContainer/highlight.position = _convert_pos(current_selection)
 		$GridContainer/highlight.scale = Vector2(1, 1)
+		$Stats.load_unit(cmap[button_grid[current_selection.x][current_selection.y]].instance())
 	else:
 		if current_selection.y == 0:
 			$GridContainer/highlight.position = Vector2(0, 455)
