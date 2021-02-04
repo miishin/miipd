@@ -78,9 +78,10 @@ func _input(event : InputEvent):
 		current_selection += Vector2(1, 0)
 	elif event.is_action_pressed("ui_select"):
 		if current_selection.x == 2:
+			current_selection.y = clamp(current_selection.y, 0, 1)
 			if current_selection.y == 0:
 				_on_back_pressed()
-			elif current_selection.y >= 1:
+			elif current_selection.y == 1:
 				_on_forward_pressed()
 		else:
 			toggle_button(button_grid[current_selection.x][current_selection.y])
