@@ -8,14 +8,15 @@
 animations = [ {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "default",
+"name": "idle",
 "speed": 5.0
 } ]
 
 [node name="Node2D" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="1"]
+[node name="AnimatedSprite" parent="." index="1"]
 position = Vector2( 0.281, 20 )
 scale = Vector2( 0.4, 0.4 )
 frames = SubResource( 1 )
+animation = "idle"
