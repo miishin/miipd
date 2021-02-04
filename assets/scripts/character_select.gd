@@ -80,7 +80,7 @@ func _input(event : InputEvent):
 		if current_selection.x == 2:
 			if current_selection.y == 0:
 				_on_back_pressed()
-			elif current_selection.y == 1:
+			elif current_selection.y >= 1:
 				_on_forward_pressed()
 		else:
 			toggle_button(button_grid[current_selection.x][current_selection.y])
