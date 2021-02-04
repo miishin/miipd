@@ -84,6 +84,8 @@ func _input(event : InputEvent):
 				_on_forward_pressed()
 		else:
 			toggle_button(button_grid[current_selection.x][current_selection.y])
+	else:
+		return
 	update_selection()
 	update_selection_box()
 

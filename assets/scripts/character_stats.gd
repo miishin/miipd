@@ -2,7 +2,6 @@ extends Control
 	
 # Takes in a unit and sets this windows data accordingly
 func load_unit(unit : Unit):
-	print(unit)
 	_set_hp(unit.hp)
 	_set_atk(unit.atk)
 	_set_def(unit.def)
