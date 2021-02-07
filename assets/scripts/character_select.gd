@@ -143,10 +143,11 @@ func toggle_button(button_id):
 func update_selection_box():
 	clear_selections()
 	var desired_size = Vector2(128, 128)
-	var actual_size = Vector2(200, 200)
-	var scale_vector = desired_size / actual_size
 	for i in range(len(selected_characters)):
-		selection_boxes[i].set_texture(load(button_map[selected_characters[i]].get_normal_texture().resource_path))
+		var c : TextureRect = button_map[selected_characters[i]].get_children()[0]
+		var actual_size = c.rect_size
+		var scale_vector = desired_size / actual_size
+		selection_boxes[i].set_texture(load(c.texture.resource_path))
 		selection_boxes[i].scale = scale_vector
 
 func clear_selections():
