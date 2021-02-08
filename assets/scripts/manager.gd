@@ -205,7 +205,7 @@ func place_cursor(show = false) -> void:
 		highlight_ability_range(current_unit, signal_args[0])
 		if board.get_tile(cursor_pos).is_highlighted():
 			var ability : Ability = current_unit.abilities[signal_args[0]]
-			var tiles = board.find_accessible(board.get_tile(cursor_pos), 0, ability.aoe - 1)
+			var tiles = board.get_aoe(current_unit, board.get_tile(cursor_pos), ability)
 			board.highlight_tiles(tiles, Tile.RED_HIGHLIGHT) 
 	if show:
 		$Cursor.show()
@@ -288,7 +288,7 @@ func ability(args : Array) -> void:
 	if signal_callback in turn_state:
 		return
 	var ability : Ability = current_unit.abilities[args[0]]
-	var tiles = board.find_accessible(board.get_tile(cursor_pos), 0, ability.aoe - 1)
+	var tiles = board.get_aoe(current_unit, board.get_tile(cursor_pos), ability)
 	
 	for tile in tiles:
 		var enemy = board.get_enemy(tile.pos)
