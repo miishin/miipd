@@ -94,10 +94,69 @@ func pathfinder(origin : Tile, destination : Tile, distance : int) -> Array:
 	return []
 
 func highlight_range(origin : Tile, ability : Ability):
-	highlight_tiles(find_accessible(origin, int(ability.ability_range.x), int(ability.ability_range.y), true))
+	highlight_tiles(get_range(origin, ability))
 
 func unhighlight_range(origin : Tile, ability : Ability):
-	unhighlight_tiles(find_accessible(origin, int(ability.ability_range.x), int(ability.ability_range.y), true))
+	unhighlight_tiles(get_range(origin, ability))
+
+func get_range(origin : Tile, ability : Ability) -> Array:
+	var range_tiles = []
+	match ability.range_angle:
+		Ability.RangeAngle.FULL:
+			return find_accessible(origin, int(ability.ability_range.x), int(ability.ability_range.y), true)
+		Ability.RangeAngle.PERPENDICULAR:
+			for i in range(ability.ability_range.x, ability.ability_range.y):
+				var a = origin.pos + Vector2(i, 0)
+				var b = origin.pos + Vector2(-i, 0)
+				var c = origin.pos + Vector2(0, i)
+				var d = origin.pos + Vector2(0, -i)
+				if a.x >= 0 and a.x < num_rows:
+					range_tiles.append(get_tile(a))
+				if b.x >= 0 and b.x < num_rows:
+					range_tiles.append(get_tile(b))
+				if c.y >= 0 and c.y < num_cols:
+					range_tiles.append(get_tile(c))
+				if d.y >= 0 and d.y < num_cols:
+					range_tiles.append(get_tile(d))
+		Ability.RangeAngle.DIAGONAL:
+			for i in range(ability.ability_range.x, ability.ability_range.y):
+				var a = origin.pos + Vector2(i, i)
+				var b = origin.pos + Vector2(-i, i)
+				var c = origin.pos + Vector2(i, -i)
+				var d = origin.pos + Vector2(-i, -i)
+				if a.x >= 0 and a.x < num_rows:
+					range_tiles.append(get_tile(a))
+				if b.x >= 0 and b.x < num_rows:
+					range_tiles.append(get_tile(b))
+				if c.y >= 0 and c.y < num_cols:
+					range_tiles.append(get_tile(c))
+				if d.y >= 0 and d.y < num_cols:
+					range_tiles.append(get_tile(d))
+	return range_tiles
+
+func get_aoe(unit : Unit, origin : Tile, ability : Ability) -> Array:
+	var aoe_tiles = []
+	match ability.aoe_type:
+		Ability.AoeType.CIRCULAR:
+			return find_accessible(origin, 0, ability.aoe)
+		Ability.AoeType.LINE:
+			if ability.aoe == 0:
+				var diff : Vector2 = origin.pos - unit.occupied_tile 
+				if diff.x != 0 and diff.y != 0:
+					return aoe_tiles
+				aoe_tiles = pathfinder(origin, get_tile(unit.occupied_tile), int(diff.abs().dot(Vector2(1,1))))
+				aoe_tiles.pop_back()
+			elif ability.aoe < 0:
+				var diff : Vector2 = origin.pos - unit.occupied_tile
+				diff = diff.normalized()
+				diff = diff.round()
+				for i in range(0, abs(ability.aoe)):
+					var next_tile : Vector2 = origin.pos + i * diff
+					if next_tile.x < 0 or next_tile.y < 0 or \
+					next_tile.x >= num_rows or next_tile.y >= num_cols:
+						continue
+					aoe_tiles.append(get_tile(next_tile))
+	return aoe_tiles
 
 # Highlights the given tiles
 func highlight_tiles(tile_list : Array, color : Color = Tile.NORMAL_HIGHLIGHT) -> void:
@@ -132,11 +191,5 @@ func tile_coordinates(tile_list : Array) -> Array:
 		coordinates.append(convert_coordinate(tile.pos))
 	return coordinates
 
-func get_enemy(coordinates : Vector2) -> Unit:
-	for enemy in enemy_units:
-		if enemy.occupied_tile == coordinates:
-			return enemy
-	return null
-	
 func get_tile(pos: Vector2) -> Tile:
 	return tiles[pos.x][pos.y]
