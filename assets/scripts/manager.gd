@@ -288,7 +288,10 @@ func ability(args : Array) -> void:
 	if signal_callback in turn_state:
 		return
 	var ability : Ability = current_unit.abilities[args[0]]
-	var tiles = board.get_aoe(current_unit, board.get_tile(cursor_pos), ability)
+	var cursor_tile : Tile = board.get_tile(cursor_pos)
+	if not cursor_tile.is_highlighted():
+		return
+	var tiles = board.get_aoe(current_unit, cursor_tile, ability)
 	
 	for tile in tiles:
 		var enemy = board.get_enemy(tile.pos)
