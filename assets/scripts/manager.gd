@@ -286,20 +286,50 @@ func move(_args : Array) -> void:
 
 func ability(args : Array) -> void:
 	if signal_callback in turn_state:
+		print("can't perform this action")
 		return
 	var ability : Ability = current_unit.abilities[args[0]]
 	var cursor_tile : Tile = board.get_tile(cursor_pos)
 	if not cursor_tile.is_highlighted():
+		print("can't select this tile")
 		return
+		
+	var targetable_units = []
+	match ability.target:
+		Ability.AbilityTarget.ALL_UNITS:
+			targetable_units = all_units
+		Ability.AbilityTarget.EMPTY:
+			targetable_units = all_units
+		Ability.AbilityTarget.ALLY:
+			targetable_units = player_units
+		Ability.AbilityTarget.ENEMY:
+			targetable_units = board.enemy_units
+		Ability.AbilityTarget.ALL:
+			pass
+	if len(targetable_units) > 0:
+		var valid : bool = false
+		for unit in targetable_units:
+			if unit.occupied_tile == cursor_pos:
+				valid = true
+				break
+		if ability.target == Ability.AbilityTarget.EMPTY:
+			valid = !valid
+		if not valid:
+			print("invalid target")
+			return
 	var tiles = board.get_aoe(current_unit, cursor_tile, ability)
 	
+	var hit_units = []
 	for tile in tiles:
-		var enemy = board.get_enemy(tile.pos)
-		if enemy:
-			enemy.apply(ability)
-			if enemy.dead():
-				remove_unit(enemy)
-			action = false
+		for unit in all_units:
+			if unit.occupied_tile == tile.pos:
+				hit_units.append(unit)
+	for unit in hit_units:
+		unit.apply(ability)
+		if unit.dead():
+			remove_unit(unit)
+
+	action = false
 	board.unhighlight_all()
 	update_turn_state(signal_callback)
 	disable_abilities()

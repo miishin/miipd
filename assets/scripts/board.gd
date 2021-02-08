@@ -191,11 +191,5 @@ func tile_coordinates(tile_list : Array) -> Array:
 		coordinates.append(convert_coordinate(tile.pos))
 	return coordinates
 
-func get_enemy(coordinates : Vector2) -> Unit:
-	for enemy in enemy_units:
-		if enemy.occupied_tile == coordinates:
-			return enemy
-	return null
-	
 func get_tile(pos: Vector2) -> Tile:
 	return tiles[pos.x][pos.y]
