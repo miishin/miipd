@@ -28,9 +28,6 @@ func init_abilities():
 func fight(other : Unit) -> void:
 	other.hp -= (self.atk - other.def)
 
-func apply(ability: Ability):
-	hp -= (ability.damage  - def)
-
 func move(start : Vector2, end : Vector2, delay : float = 0) -> void:
 	$Tween.interpolate_property(self, "position",
 		start, end, MOVE_TIME,

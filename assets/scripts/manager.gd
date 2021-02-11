@@ -205,7 +205,7 @@ func place_cursor(show = false) -> void:
 		highlight_ability_range(current_unit, signal_args[0])
 		if board.get_tile(cursor_pos).is_highlighted():
 			var ability : Ability = current_unit.abilities[signal_args[0]]
-			var tiles = board.get_aoe(current_unit, board.get_tile(cursor_pos), ability)
+			var tiles = ability.get_aoe(current_unit, board.get_tile(cursor_pos), board)
 			board.highlight_tiles(tiles, Tile.RED_HIGHLIGHT) 
 	if show:
 		$Cursor.show()
@@ -236,7 +236,7 @@ func _on_ability_down(num : int):
 
 func highlight_ability_range(unit : Unit, i : int):
 	board.unhighlight_all()
-	board.highlight_range(board.get_tile(unit.occupied_tile), unit.abilities[i])
+	unit.abilities[i].highlight_range(board.get_tile(unit.occupied_tile), board)
 
 func _on_move_button_down() -> void:
 	action = true
@@ -317,7 +317,7 @@ func ability(args : Array) -> void:
 		if not valid:
 			print("invalid target")
 			return
-	var tiles = board.get_aoe(current_unit, cursor_tile, ability)
+	var tiles = ability.get_aoe(current_unit, cursor_tile, board)
 	
 	var hit_units = []
 	for tile in tiles:
@@ -325,10 +325,10 @@ func ability(args : Array) -> void:
 			if unit.occupied_tile == tile.pos:
 				hit_units.append(unit)
 	for unit in hit_units:
-		unit.apply(ability)
+		ability.target_apply(unit)
 		if unit.dead():
 			remove_unit(unit)
-
+	ability.self_apply(board, current_unit, cursor_tile)
 	action = false
 	board.unhighlight_all()
 	update_turn_state(signal_callback)
