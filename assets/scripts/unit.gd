@@ -12,6 +12,14 @@ var atk : int = 2
 var def : int = 1
 var mov : int = 2
 
+var og_mov : int = mov
+
+var buff   : int
+var debuff : int
+
+var debuff_counter : int = 0
+var buff_counter   : int = 0
+
 var abilities : Array
 
 func _ready() -> void:
@@ -25,8 +33,19 @@ func init_abilities():
 	abilities.append(Globals.ability_map["bash"])
 	abilities.append(Globals.ability_map["slash"])
 	
-func fight(other : Unit) -> void:
-	other.hp -= (self.atk - other.def)
+func end_turn():
+	if buff != 0:
+		buff_counter -= 1
+		if buff_counter == 0:
+			buff = 0
+	if debuff != 0:
+		debuff_counter -= 1
+		if debuff_counter == 0:
+			debuff = 0
+			reset_mov()
+
+func reset_mov():
+	mov = og_mov
 
 func move(start : Vector2, end : Vector2, delay : float = 0) -> void:
 	$Tween.interpolate_property(self, "position",

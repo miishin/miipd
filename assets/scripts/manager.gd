@@ -148,7 +148,7 @@ func ai_turn() -> void:
 	path = path.slice(1, len(path) - 2) # Ignore last tile so that AI doesn't stand on top of player
 	
 	if len(path) == 0:
-		current_unit.fight(closest_player)
+		current_unit.abilities[0].target_apply(current_unit, closest_player)
 		if closest_player.dead():
 			remove_unit(closest_player)
 	else:
@@ -157,7 +157,7 @@ func ai_turn() -> void:
 		if yielded:
 			Globals.yielded_animations.push_back(yielded)
 		if accessible_path == path:
-			current_unit.fight(closest_player)
+			current_unit.abilities[0].target_apply(current_unit, closest_player)
 			if closest_player.dead():
 				remove_unit(closest_player)
 		current_unit.occupied_tile = accessible_path[-1].pos
@@ -254,6 +254,7 @@ func change_turn():
 	player_turn = false
 	next = false
 	signal_callback = ""
+	current_unit.end_turn()
 	signal_args = []
 	turn_state.clear()
 	board.get_tile(cursor_pos).deselect()
@@ -325,10 +326,10 @@ func ability(args : Array) -> void:
 			if unit.occupied_tile == tile.pos:
 				hit_units.append(unit)
 	for unit in hit_units:
-		ability.target_apply(unit)
+		ability.target_apply(current_unit, unit)
 		if unit.dead():
 			remove_unit(unit)
-	ability.self_apply(board, current_unit, cursor_tile)
+	ability.self_apply(current_unit, hit_units, cursor_tile, board)
 	action = false
 	board.unhighlight_all()
 	update_turn_state(signal_callback)
