@@ -37,13 +37,16 @@ var debuff : int
 # Size of AoE of ability (AoE = 1 for singular target) in tiles
 var aoe : int
 
+# Whether the ability moves the unit or not
+var moves : bool
+
 # Tooltip/description of ability
 var description : String
 
 # Name of the ability
 var title : String
 
-func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_enum):
+func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_enum, does_move):
 	title = name
 	damage = dmg
 	range_angle = angle
@@ -52,4 +55,93 @@ func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_
 	aoe = aoe_range
 	target = target_enum
 	debuff = debuff_enum
+	moves = does_move
 	description = "Does " + str(dmg) + " damage"	
+
+func target_apply(unit: Unit):
+	unit.hp -= (damage  - unit.def)
+
+func self_apply(board : Board, unit : Unit, selected : Tile):
+	if moves:
+		var diff : Vector2 = unit.occupied_tile - selected.pos
+		var path = board.pathfinder(board.get_tile(unit.occupied_tile), selected, int(diff.abs().dot(Vector2(1, 1))))
+		var yielded = unit.move_path(board.tile_coordinates(path))
+		if yielded:
+			Globals.yielded_animations.push_back(yielded)
+		unit.occupied_tile = selected.pos
+	
+	var id : String
+	for k in Globals.ability_map.keys():
+		if Globals.ability_map[k] == self:
+			id = k
+			break
+	if Globals.special_abilities.has(id):
+		call(id, unit, selected, board)
+
+func highlight_range(origin : Tile, board : Board):
+	board.highlight_tiles(get_range(origin, board))
+
+func unhighlight_range(origin : Tile, board : Board):
+	board.unhighlight_tiles(get_range(origin, board))
+
+func get_range(origin : Tile, board : Board) -> Array:
+	var range_tiles = []
+	match range_angle:
+		RangeAngle.FULL:
+			return board.find_accessible(origin, int(ability_range.x), int(ability_range.y), true)
+		RangeAngle.PERPENDICULAR:
+			for i in range(ability_range.x, ability_range.y):
+				var a = origin.pos + Vector2(i, 0)
+				var b = origin.pos + Vector2(-i, 0)
+				var c = origin.pos + Vector2(0, i)
+				var d = origin.pos + Vector2(0, -i)
+				if a.x >= 0 and a.x < board.num_rows:
+					range_tiles.append(board.get_tile(a))
+				if b.x >= 0 and b.x < board.num_rows:
+					range_tiles.append(board.get_tile(b))
+				if c.y >= 0 and c.y < board.num_cols:
+					range_tiles.append(board.get_tile(c))
+				if d.y >= 0 and d.y < board.num_cols:
+					range_tiles.append(board.get_tile(d))
+		RangeAngle.DIAGONAL:
+			for i in range(ability_range.x, ability_range.y):
+				var a = origin.pos + Vector2(i, i)
+				var b = origin.pos + Vector2(-i, i)
+				var c = origin.pos + Vector2(i, -i)
+				var d = origin.pos + Vector2(-i, -i)
+				if a.x >= 0 and a.x < board.num_rows:
+					range_tiles.append(board.get_tile(a))
+				if b.x >= 0 and b.x < board.num_rows:
+					range_tiles.append(board.get_tile(b))
+				if c.y >= 0 and c.y < board.num_cols:
+					range_tiles.append(board.get_tile(c))
+				if d.y >= 0 and d.y < board.num_cols:
+					range_tiles.append(board.get_tile(d))
+	return range_tiles
+
+func get_aoe(unit : Unit, origin : Tile, board : Board) -> Array:
+	var aoe_tiles = []
+	match aoe_type:
+		AoeType.CIRCULAR:
+			return board.find_accessible(origin, 0, aoe)
+		AoeType.LINE:
+			if aoe == 0:
+				var diff : Vector2 = origin.pos - unit.occupied_tile 
+				if diff.x != 0 and diff.y != 0:
+					return aoe_tiles
+				aoe_tiles = board.pathfinder(origin, board.get_tile(unit.occupied_tile), int(diff.abs().dot(Vector2(1,1))))
+				aoe_tiles.pop_back()
+			elif aoe < 0:
+				var diff : Vector2 = origin.pos - unit.occupied_tile
+				diff = diff.normalized()
+				diff = diff.round()
+				for i in range(0, abs(aoe)):
+					var next_tile : Vector2 = origin.pos + i * diff
+					if next_tile.x < 0 or next_tile.y < 0 or \
+					next_tile.x >= board.num_rows or next_tile.y >= board.num_cols:
+						continue
+					aoe_tiles.append(board.get_tile(next_tile))
+	return aoe_tiles
+
+func retweet(unit : Unit, tile : Tile, board : Board):
+	print("retweeted")
