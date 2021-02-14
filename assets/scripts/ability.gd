@@ -213,3 +213,6 @@ func digest(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 func lay_egg(_unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 	pass
 
+func buzz(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
+	print("bzz")
+	unit.aggro = 2

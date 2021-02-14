@@ -12,7 +12,7 @@ var ability_map = {
 	"slash": make_ability("Slash", 3, Ability.RangeAngle.FULL, Vector2(2, 3), Ability.AoeType.CIRCULAR, 2, Ability.AbilityTarget.ENEMY, Ability.Debuff.NONE),
 	"pinch" : make_ability("Pinch", 100, Ability.RangeAngle.FULL, Vector2(1, 1), Ability.AoeType.CIRCULAR, 1, Ability.AbilityTarget.ENEMY, Ability.Debuff.NONE),
 	"dash_slice" : make_ability("Dash Slice", 2, Ability.RangeAngle.PERPENDICULAR, Vector2(2, 10), Ability.AoeType.LINE, 0, Ability.AbilityTarget.EMPTY, Ability.Debuff.NONE, true),
-	"rave" : make_ability("Crab Rave", 1000, Ability.RangeAngle.FULL, Vector2(0, 0), Ability.AoeType.CIRCULAR, 0, Ability.AbilityTarget.ALLY, Ability.Debuff.NONE),
+	"rave" : make_ability("Crab Rave", 0, Ability.RangeAngle.FULL, Vector2(0, 0), Ability.AoeType.CIRCULAR, 0, Ability.AbilityTarget.ALLY, Ability.Debuff.NONE),
 	"lay_egg" : make_ability("Lay Egg", 0, Ability.RangeAngle.FULL, Vector2(1, 1), Ability.AoeType.CIRCULAR, 0, Ability.AbilityTarget.EMPTY, Ability.Debuff.NONE),
 	"birds_with_arms" : make_ability("Birds With Arms", 4, Ability.RangeAngle.FULL, Vector2(1, 4), Ability.AoeType.LINE, -2, Ability.AbilityTarget.ALL_UNITS, Ability.Debuff.NONE),
 	"retweet" : make_ability("Retweet", 0, Ability.RangeAngle.FULL, Vector2(1, 3), Ability.AoeType.CIRCULAR, 0, Ability.AbilityTarget.ALL_UNITS, Ability.Debuff.NONE),
@@ -39,6 +39,7 @@ var special_abilities = {
 	"lay_egg"   : true,
 	"shell_up"  : true,
 	"shell_out" : true,
+	"buzz" 		: true,
 }
 
 static func make_ability(name, dmg, angle, ability_range, aoe_type, aoe, target, debuff, moves = false) -> Ability:

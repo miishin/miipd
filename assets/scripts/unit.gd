@@ -11,8 +11,8 @@ var hp  : int = 10
 var atk : int = 2
 var def : int = 1
 var mov : int = 2
-
 var og_mov : int = mov
+var aggro : int = 0
 
 var buff   : int
 var debuff : int
