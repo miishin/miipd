@@ -18,6 +18,8 @@ enum AbilityTarget {ALLY, ENEMY, ALL_UNITS, EMPTY, ALL}
 # The type of debuff this ability inflicts
 enum Debuff {NONE, ROOT, CONSUMED}
 
+enum Buff {NONE, FULL, IMMUNE}
+
 # How much damage this ability does
 # If AoE this is damage per tile
 # Negative damage = a heal
@@ -58,10 +60,17 @@ func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_
 	moves = does_move
 	description = "Does " + str(dmg) + " damage"	
 
-func target_apply(unit: Unit):
-	unit.hp -= (damage  - unit.def)
+func target_apply(unit : Unit, target_unit: Unit):
+	if damage <= 0:
+		target_unit.hp -= damage
+	else:
+		target_unit.hp -= (damage  - target_unit.def)
 
-func self_apply(board : Board, unit : Unit, selected : Tile):
+	if target_unit.buff == Buff.IMMUNE:
+		negate_damage(target_unit)
+	call_special("_target", [unit, target_unit])
+
+func self_apply(unit : Unit, targets : Array, selected : Tile, board : Board):
 	if moves:
 		var diff : Vector2 = unit.occupied_tile - selected.pos
 		var path = board.pathfinder(board.get_tile(unit.occupied_tile), selected, int(diff.abs().dot(Vector2(1, 1))))
@@ -69,14 +78,16 @@ func self_apply(board : Board, unit : Unit, selected : Tile):
 		if yielded:
 			Globals.yielded_animations.push_back(yielded)
 		unit.occupied_tile = selected.pos
+	call_special("", [unit, targets, selected, board])
 	
+func call_special(func_suffix, args : Array):
 	var id : String
 	for k in Globals.ability_map.keys():
 		if Globals.ability_map[k] == self:
 			id = k
 			break
 	if Globals.special_abilities.has(id):
-		call(id, unit, selected, board)
+		callv(id + func_suffix, args)
 
 func highlight_range(origin : Tile, board : Board):
 	board.highlight_tiles(get_range(origin, board))
@@ -143,5 +154,62 @@ func get_aoe(unit : Unit, origin : Tile, board : Board) -> Array:
 					aoe_tiles.append(board.get_tile(next_tile))
 	return aoe_tiles
 
-func retweet(unit : Unit, tile : Tile, board : Board):
-	print("retweeted")
+func negate_damage(unit : Unit):
+	if damage == 0:
+		return
+	unit.hp += (damage - unit.def)
+
+##################################
+# Abilities with special effects #
+##################################
+
+func retweet(unit : Unit, targets : Array, selected : Tile, board : Board):
+	var ability : Ability = targets[0].abilities[randi() % len(targets[0].abilities)]
+	ability.target_apply(unit, targets[0])
+	ability.self_apply(unit, targets[0], selected, board)
+	print("used ", ability.title)
+
+func shell_up(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
+	unit.buff = Buff.IMMUNE
+	unit.debuff = Debuff.ROOT
+	unit.mov = 0
+	unit.buff_counter = 2
+	unit.debuff_counter = 2
+	
+func shell_out(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
+	unit.buff = Buff.NONE
+	unit.debuff = Debuff.NONE
+	unit.reset_mov()
+	unit.buff_counter = 0
+	unit.debuff_counter = 0
+
+func rave(_unit : Unit, _targets : Array, _selected : Tile, _board : Board):
+	pass
+
+func eat_target(unit : Unit, target_unit : Unit):
+	if unit.buff == Buff.FULL:
+		negate_damage(target_unit)
+		print("already full")
+	else:
+		unit.buff = Buff.FULL
+		unit.buff_counter = 2
+		print("yum")
+
+func vomit_target(unit : Unit, target_unit : Unit):
+	if unit.buff != Buff.FULL:
+		negate_damage(target_unit)
+		print("nothing to vomit Ì†æÌ¥∑‚Äç‚ôÄÔ∏è")
+		return
+	unit.buff = Buff.NONE
+	print("yucky")
+
+func digest(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
+	if unit.buff != Buff.FULL:
+		negate_damage(unit)
+		return
+	unit.buff = Buff.NONE
+	print("delicious")
+
+func lay_egg(_unit : Unit, _targets : Array, _selected : Tile, _board : Board):
+	pass
+
