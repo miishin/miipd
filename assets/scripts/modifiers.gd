@@ -10,3 +10,9 @@ func on_application(unit : Unit):
 	
 func on_expiration(unit : Unit):
 	pass
+
+func inc_turn():
+	duration -= 1
+	
+func modifier_over():
+	return duration == 0
