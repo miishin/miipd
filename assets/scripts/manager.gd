@@ -168,10 +168,10 @@ func closest_unit(origin : Vector2, units : Array) -> Unit:
 		return null
 	var closest = units[0]
 	var diff_vector = origin - units[0].occupied_tile
-	var min_distance = abs(diff_vector.x) + abs(diff_vector.y)
+	var min_distance = abs(diff_vector.x) + abs(diff_vector.y) - closest.aggro
 	for unit in units:
 		diff_vector = origin - unit.occupied_tile
-		var diff = abs(diff_vector.x) + abs(diff_vector.y)
+		var diff = abs(diff_vector.x) + abs(diff_vector.y) - unit.aggro
 		if diff < min_distance:
 			min_distance = diff
 			closest = unit
