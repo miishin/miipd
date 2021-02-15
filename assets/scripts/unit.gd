@@ -13,6 +13,7 @@ var def : int = 1
 var mov : int = 2
 var og_mov : int = mov
 var aggro : int = 0
+var modifiers : Array
 
 var buff   : int
 var debuff : int
