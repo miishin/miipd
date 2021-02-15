@@ -11,10 +11,10 @@ func init(d : int, id):
 	id = id
 	
 func on_application(unit : Unit):
-	call("apply_" + func_names[id])
+	call("apply_" + func_names[id], unit)
 	
 func on_expiration(unit : Unit):
-	call("clear_" + func_names[id])
+	call("clear_" + func_names[id], unit)
 
 func inc_turn(unit : Unit):
 	duration -= 1
