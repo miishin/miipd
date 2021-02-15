@@ -215,7 +215,7 @@ func lay_egg(_unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 
 func buzz(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 	print("bzz")
-	var m = Modifier.instance(2, 5)
+	var m = Modifier.make_aggro_up()
 	#unit.modifiers.append(m)
 	#m.on_application()
 	
