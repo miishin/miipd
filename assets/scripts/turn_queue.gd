@@ -26,12 +26,12 @@ func generate_next_units(n : int):
 	for i in range(n):
 		queue.append(next_unit())
 		
-func next_unit():
+func next_unit() -> Unit:
 	rng.randomize()
 	var next = rng.randf_range(1, total_speed)
 	return _find_unit(next)
 	
-func _find_unit(speed : int):
+func _find_unit(speed : int) -> Unit:
 	var counter = 0
 	for unit in units:
 		if speed < unit.spd + counter:
