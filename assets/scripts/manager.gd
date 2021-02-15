@@ -11,7 +11,7 @@ var action          : bool
 var player_turn     : bool
 var stage_number    : int
 var all_units       : Array
-var turn_queue      : Array
+var turn_queue      : TurnQueue
 var player_units    : Array
 var signal_callback : String
 var current_unit    : Unit
@@ -39,19 +39,14 @@ func set_coordinates(b : Board, units : Array) -> void:
 
 func init_units() -> void:
 	all_units = []
-	turn_queue = []
 	for unit in player_units:
 		all_units.append(unit)
-		turn_queue.append(unit)
 	for unit in board.enemy_units:
 		all_units.append(unit)
-		turn_queue.append(unit)
-	turn_queue.sort_custom(self, "spd_comparator")
-	for unit in turn_queue:
-		$TurnQueue.add_unit(unit.clone())
-
-func spd_comparator(unit1 : Unit, unit2 : Unit) -> bool:
-	return unit1.spd > unit2.spd
+	turn_queue = TurnQueue.new(all_units)
+	turn_queue.generate_next_units(5)
+	for unit in turn_queue.queue:
+		$TurnQueue.add_unit(unit)
 
 # Initialize window with a board and the player's units
 func init(units: Array) -> void:
@@ -65,7 +60,7 @@ func init(units: Array) -> void:
 	for unit in units:
 		add_child(unit)
 	init_units()
-	current_unit = turn_queue[0]
+	current_unit = turn_queue.queue[0]
 	if current_unit in player_units:
 		player_turn = true
 		load_ability_menu()
@@ -114,13 +109,11 @@ func update_gamestate():
 	update_turn_queue()
 	
 func update_turn_queue() -> void:
-	var last_unit = turn_queue.pop_front()
-	turn_queue.push_back(last_unit)
-	current_unit = turn_queue[0]
+	turn_queue.increment_turn()
+	current_unit = turn_queue.queue[0]
 	load_ability_menu()
 	
-	last_unit = $TurnQueue.units.pop_front()
-	$TurnQueue.units.push_back(last_unit)
+	# need to update $TurnQueue
 	$TurnQueue.update()
 	
 	if not (current_unit in player_units):
@@ -349,6 +342,6 @@ func remove_unit(unit : Unit):
 	elif unit in player_units:
 		player_units.erase(unit)
 	all_units.erase(unit)
-	turn_queue.erase(unit)
+	turn_queue.remove_unit(unit)
 	$TurnQueue.delete_unit(unit)
 	unit.queue_free()
