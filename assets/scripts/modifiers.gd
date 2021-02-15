@@ -15,14 +15,12 @@ func on_application(unit : Unit):
 	
 func on_expiration(unit : Unit):
 	call("clear_" + func_names[id], unit)
+	unit.modifiers.erase(self)
 
 func inc_turn(unit : Unit):
 	duration -= 1
 	if duration == 0:
 		on_expiration(unit)
-	
-func modifier_over():
-	return duration == 0
 
 func apply_immune(unit : Unit):
 	pass
@@ -69,3 +67,4 @@ static func make_consumed(d : int):
 	
 static func make_aggro_up(d : int):
 	return Modifier.instance(d, Modifiers.AGGRO_UP)
+
