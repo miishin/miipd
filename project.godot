@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "Modifier",
 "language": "GDScript",
-"path": "res://assets/scripts/modifiers.gd"
+"path": "res://assets/scripts/modifier.gd"
 }, {
 "base": "Node2D",
 "class": "Tile",

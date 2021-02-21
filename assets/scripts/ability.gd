@@ -15,11 +15,6 @@ enum AoeType {CIRCULAR, LINE}
 # Whether this ability targets allies, enemies, or both
 enum AbilityTarget {ALLY, ENEMY, ALL_UNITS, EMPTY, ALL}
 
-# The type of debuff this ability inflicts
-enum Debuff {NONE, ROOT, CONSUMED}
-
-enum Buff {NONE, FULL, IMMUNE}
-
 # How much damage this ability does
 # If AoE this is damage per tile
 # Negative damage = a heal
@@ -34,8 +29,6 @@ var aoe_type : int
 
 var target : int
 
-var debuff : int 
-
 # Size of AoE of ability (AoE = 1 for singular target) in tiles
 var aoe : int
 
@@ -48,7 +41,7 @@ var description : String
 # Name of the ability
 var title : String
 
-func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_enum, does_move):
+func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, does_move):
 	title = name
 	damage = dmg
 	range_angle = angle
@@ -56,7 +49,6 @@ func _init(name, dmg, angle, ab_range, aoe_enum, aoe_range, target_enum, debuff_
 	aoe_type = aoe_enum
 	aoe = aoe_range
 	target = target_enum
-	debuff = debuff_enum
 	moves = does_move
 	description = "Does " + str(dmg) + " damage"	
 
@@ -65,9 +57,11 @@ func target_apply(unit : Unit, target_unit: Unit):
 		target_unit.hp -= damage
 	else:
 		target_unit.hp -= (damage  - target_unit.def)
-
-	if target_unit.buff == Buff.IMMUNE:
-		negate_damage(target_unit)
+	
+	for mod in target_unit.modifiers:
+		match mod.id:
+			Modifier.Modifiers.IMMUNE:
+				negate_damage(target_unit)
 	call_special("_target", [unit, target_unit])
 
 func self_apply(unit : Unit, targets : Array, selected : Tile, board : Board):
@@ -170,52 +164,45 @@ func retweet(unit : Unit, targets : Array, selected : Tile, board : Board):
 	print("used ", ability.title)
 
 func shell_up(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
-	unit.buff = Buff.IMMUNE
-	unit.debuff = Debuff.ROOT
-	unit.mov = 0
-	unit.buff_counter = 2
-	unit.debuff_counter = 2
+	unit.apply_modifier(Globals.modifiers[Modifier.Modifiers.ROOT])
+	unit.apply_modifier(Globals.modifiers[Modifier.Modifiers.IMMUNE])
 	
 func shell_out(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
-	unit.buff = Buff.NONE
-	unit.debuff = Debuff.NONE
-	unit.reset_mov()
-	unit.buff_counter = 0
-	unit.debuff_counter = 0
+	unit.finish(Globals.modifiers[Modifier.Modifiers.ROOT])
+	unit.finish(Globals.modifiers[Modifier.Modifiers.IMMUNE])
 
 func rave(_unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 	pass
+	
+func spit_target(_unit : Unit, target_unit : Unit):
+	target_unit.apply_modifier(Globals.modifiers[Modifier.Modifiers.ROOT])
 
 func eat_target(unit : Unit, target_unit : Unit):
-	if unit.buff == Buff.FULL:
+	if unit.has_modifier(Modifier.Modifiers.FULL):
 		negate_damage(target_unit)
 		print("already full")
 	else:
-		unit.buff = Buff.FULL
-		unit.buff_counter = 2
+		unit.apply_modifier(Globals.modifiers[Modifier.Modifiers.FULL])
 		print("yum")
 
 func vomit_target(unit : Unit, target_unit : Unit):
-	if unit.buff != Buff.FULL:
+	if !unit.has_modifier(Modifier.Modifiers.FULL):
 		negate_damage(target_unit)
 		print("nothing to vomit Ì†æÌ¥∑‚Äç‚ôÄÔ∏è")
 		return
-	unit.buff = Buff.NONE
+	unit.finish(Globals.modifiers[Modifier.Modifiers.FULL])
 	print("yucky")
 
 func digest(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
-	if unit.buff != Buff.FULL:
+	if !unit.has_modifier(Modifier.Modifiers.FULL):
 		negate_damage(unit)
 		return
-	unit.buff = Buff.NONE
+	unit.finish(Globals.modifiers[Modifier.Modifiers.FULL])
 	print("delicious")
 
 func lay_egg(_unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 	pass
-
+	
 func buzz(unit : Unit, _targets : Array, _selected : Tile, _board : Board):
 	print("bzz")
-	var m = Modifier.instance(2, 5)
-	#unit.modifiers.append(m)
-	#m.on_application()
-	
+	unit.apply_modifier(Globals.modifiers[Modifier.Modifiers.AGGRO_UP])

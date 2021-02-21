@@ -161,6 +161,7 @@ func ai_turn() -> void:
 			if closest_player.dead():
 				remove_unit(closest_player)
 		current_unit.occupied_tile = accessible_path[-1].pos
+	current_unit.end_turn()
 	update_gamestate()
 	
 func closest_unit(origin : Vector2, units : Array) -> Unit:
