@@ -2,22 +2,22 @@
 
 [ext_resource path="res://assets/scripts/character_select.gd" type="Script" id=1]
 [ext_resource path="res://assets/graphics/backgrounds/character_select.png" type="Texture" id=2]
-[ext_resource path="res://assets/graphics/sprites/hamster_iso.png" type="Texture" id=3]
+[ext_resource path="res://assets/graphics/sprites/crab/thumbnail.png" type="Texture" id=3]
 [ext_resource path="res://assets/graphics/character_select/blue.png" type="Texture" id=4]
 [ext_resource path="res://assets/scenes/character_stats.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/graphics/character_select/back.png" type="Texture" id=6]
 [ext_resource path="res://assets/graphics/character_select/pink.png" type="Texture" id=7]
 [ext_resource path="res://assets/graphics/sprites/salamander.png" type="Texture" id=8]
-[ext_resource path="res://assets/graphics/sprites/birb.png" type="Texture" id=9]
-[ext_resource path="res://assets/graphics/sprites/crab_idle.png" type="Texture" id=10]
-[ext_resource path="res://assets/graphics/sprites/turtle.png" type="Texture" id=11]
+[ext_resource path="res://assets/graphics/sprites/hamster/thumbnail.png" type="Texture" id=9]
+[ext_resource path="res://assets/graphics/sprites/birb/thumbnail.png" type="Texture" id=10]
+[ext_resource path="res://assets/graphics/sprites/turtle/thumbnail.png" type="Texture" id=11]
 [ext_resource path="res://assets/graphics/sprites/bee.png" type="Texture" id=12]
 [ext_resource path="res://assets/graphics/character_select/forward.png" type="Texture" id=13]
 [ext_resource path="res://assets/graphics/character_select/selection.png" type="Texture" id=15]
 [ext_resource path="res://assets/graphics/character_select/highlight0.png" type="Texture" id=26]
 [ext_resource path="res://assets/graphics/character_select/highlight1.png" type="Texture" id=27]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="SpriteFrames" id=16]
 animations = [ {
 "frames": [ ExtResource( 26 ), ExtResource( 27 ) ],
 "loop": true,
@@ -34,10 +34,10 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_left = -2.37842
-margin_top = 3.56763
-margin_right = 1277.62
-margin_bottom = 723.568
+margin_left = -5.20685
+margin_top = 4.98188
+margin_right = 1274.79
+margin_bottom = 724.982
 texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -119,7 +119,8 @@ __meta__ = {
 margin_right = 127.0
 margin_bottom = 127.0
 rect_scale = Vector2( 1.57144, 1.57144 )
-texture = ExtResource( 3 )
+texture = ExtResource( 9 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -156,10 +157,10 @@ __meta__ = {
 }
 
 [node name="c" type="TextureRect" parent="GridContainer/c3"]
-margin_right = 127.0
-margin_bottom = 127.0
-rect_scale = Vector2( 1.57625, 1.57625 )
-texture = ExtResource( 10 )
+margin_right = 201.0
+margin_bottom = 201.0
+texture = ExtResource( 3 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -197,10 +198,13 @@ __meta__ = {
 }
 
 [node name="c" type="TextureRect" parent="GridContainer/c5"]
-margin_right = 256.0
-margin_bottom = 256.0
-rect_scale = Vector2( 0.780543, 0.780543 )
-texture = ExtResource( 9 )
+margin_left = 3.0
+margin_top = -2.0
+margin_right = 199.0
+margin_bottom = 194.0
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -218,10 +222,11 @@ __meta__ = {
 }
 
 [node name="c" type="TextureRect" parent="GridContainer/c6"]
-margin_right = 256.0
-margin_bottom = 256.0
-rect_scale = Vector2( 0.778991, 0.778991 )
+margin_right = 200.0
+margin_bottom = 200.0
 texture = ExtResource( 11 )
+expand = true
+stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -230,7 +235,8 @@ __meta__ = {
 modulate = Color( 0.0235294, 0.0941176, 0.14902, 1 )
 position = Vector2( -0.181816, 0 )
 scale = Vector2( 0.999864, 0.999864 )
-frames = SubResource( 1 )
+frames = SubResource( 16 )
+frame = 1
 playing = true
 centered = false
 
