@@ -7,11 +7,11 @@
 [ext_resource path="res://assets/scenes/character_stats.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/graphics/character_select/back.png" type="Texture" id=6]
 [ext_resource path="res://assets/graphics/character_select/pink.png" type="Texture" id=7]
-[ext_resource path="res://assets/graphics/sprites/salamander.png" type="Texture" id=8]
+[ext_resource path="res://assets/graphics/sprites/salamander/thumbnail.png" type="Texture" id=8]
 [ext_resource path="res://assets/graphics/sprites/hamster/thumbnail.png" type="Texture" id=9]
 [ext_resource path="res://assets/graphics/sprites/birb/thumbnail.png" type="Texture" id=10]
 [ext_resource path="res://assets/graphics/sprites/turtle/thumbnail.png" type="Texture" id=11]
-[ext_resource path="res://assets/graphics/sprites/bee.png" type="Texture" id=12]
+[ext_resource path="res://assets/graphics/sprites/bee/thumbnail.png" type="Texture" id=12]
 [ext_resource path="res://assets/graphics/character_select/forward.png" type="Texture" id=13]
 [ext_resource path="res://assets/graphics/character_select/selection.png" type="Texture" id=15]
 [ext_resource path="res://assets/graphics/character_select/highlight0.png" type="Texture" id=26]
@@ -141,6 +141,7 @@ margin_right = 127.0
 margin_bottom = 127.0
 rect_scale = Vector2( 1.57432, 1.57432 )
 texture = ExtResource( 12 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -181,6 +182,7 @@ margin_right = 256.0
 margin_bottom = 256.0
 rect_scale = Vector2( 0.780806, 0.77804 )
 texture = ExtResource( 8 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

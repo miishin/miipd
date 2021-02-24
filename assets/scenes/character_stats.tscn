@@ -29,6 +29,7 @@ __meta__ = {
 
 [node name="CharSprite" type="AnimatedSprite" parent="CharSprite"]
 position = Vector2( 100, 100 )
+scale = Vector2( 5, 5 )
 playing = true
 
 [node name="AbilityIcons" type="VBoxContainer" parent="."]
