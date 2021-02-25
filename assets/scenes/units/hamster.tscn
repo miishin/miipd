@@ -1,15 +1,27 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/scenes/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/graphics/sprites/hamster_iso.png" type="Texture" id=2]
+[ext_resource path="res://assets/graphics/sprites/hamster/idle_right.png" type="Texture" id=2]
 [ext_resource path="res://assets/scripts/units/hamster.gd" type="Script" id=3]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 35, 35 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 35, 0, 35, 35 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 70, 0, 35, 35 )
+
+[sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 2 ) ],
 "loop": true,
 "name": "idle",
-"speed": 5.0
+"speed": 4.0
 } ]
 
 [node name="Hamster" instance=ExtResource( 1 )]
@@ -18,5 +30,9 @@ z_index = 2
 script = ExtResource( 3 )
 
 [node name="AnimatedSprite" parent="." index="1"]
-frames = SubResource( 1 )
+position = Vector2( 3.8147e-06, -3.8147e-06 )
+scale = Vector2( 2.28571, 2.28571 )
+frames = SubResource( 4 )
 animation = "idle"
+frame = 2
+playing = true
