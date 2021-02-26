@@ -6,20 +6,15 @@ const MOVE_TIME = 0.25
 var occupied_tile : Vector2
 var sprite = null
 
-var spd : int = (randi() % 10) + 1
-var hp  : int = 10
-var atk : int = 2
-var def : int = 1
-var mov : int = 2
+var spd    : int = (randi() % 10) + 1
+var hp     : int = 10
+var atk    : int = 2
+var def    : int = 1
+var mov    : int = 2
 var og_mov : int = mov
-var aggro : int = 0
+var aggro  : int = 0
 
-var buff   : int
-var debuff : int
-
-var debuff_counter : int = 0
-var buff_counter   : int = 0
-
+var modifiers : Array
 var abilities : Array
 
 func _ready() -> void:
@@ -34,18 +29,25 @@ func init_abilities():
 	abilities.append(Globals.ability_map["slash"])
 	
 func end_turn():
-	if buff != 0:
-		buff_counter -= 1
-		if buff_counter == 0:
-			buff = 0
-	if debuff != 0:
-		debuff_counter -= 1
-		if debuff_counter == 0:
-			debuff = 0
-			reset_mov()
+	increment_modifiers()
 
-func reset_mov():
-	mov = og_mov
+func increment_modifiers():
+	for modifier in modifiers:
+		modifier.inc_turn(self)
+
+func apply_modifier(mod: Modifier):
+	mod.on_application(self)
+	if not mod in modifiers:
+		modifiers.append(mod)
+
+func has_modifier(id : int):
+	for mod in modifiers:
+		if id == mod.id:
+			return true
+	return false
+
+func finish(mod: Modifier):
+	mod.on_expiration(self)
 
 func move(start : Vector2, end : Vector2, delay : float = 0) -> void:
 	$Tween.interpolate_property(self, "position",
