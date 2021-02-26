@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/scenes/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/scripts/units/crab.gd" type="Script" id=2]
 [ext_resource path="res://assets/graphics/sprites/crab/idle_right.png" type="Texture" id=3]
+[ext_resource path="res://assets/graphics/sprites/crab/thumbnail.png" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
@@ -40,3 +41,7 @@ animation = "idle"
 frame = 2
 playing = true
 offset = Vector2( -1, 0 )
+
+[node name="Sprite" type="Sprite" parent="." index="2"]
+visible = false
+texture = ExtResource( 4 )

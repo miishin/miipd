@@ -7,9 +7,7 @@ var rng = RandomNumberGenerator.new()
 var all_units : Array = []
 var total_speed : int
 var queue : Array = []
-
-func _ready():
-	update()
+var queue_sprites : Array
 
 func _init(units : Array):
 	all_units = units
@@ -17,6 +15,8 @@ func _init(units : Array):
 		total_speed += unit.spd
 	generate_next_n_units(5)
 	
+	queue_sprites = [$Sprites/Sprite1, $Sprites/Sprite2, $Sprites/Sprite3, $Sprites/Sprite4, $Sprites/Sprite5]
+	display()
 
 func add_unit(unit : Unit):
 	all_units.append(unit)
@@ -53,7 +53,6 @@ func rotate_queue():
 
 func display():
 	var start = 0
-	for unit in queue:
-		assert(unit is Unit)
-		unit.position.x = start
-		start += unit.get_size().x + SPACING
+	for i in range(5):
+		var sprite = queue[i].get_children()[2]
+		queue_sprites[i].set_texture(load(sprite.texture.resource_path))

@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/scenes/cursor_menu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/graphics/sprites/cursor.png" type="Texture" id=3]
 [ext_resource path="res://assets/scenes/pause_menu.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/scripts/unit_list.gd" type="Script" id=6]
+[ext_resource path="res://assets/scenes/unit_list.tscn" type="PackedScene" id=5]
 
 [node name="Node2D" type="Node2D"]
 position = Vector2( 640, 0 )
@@ -18,10 +18,8 @@ scale = Vector2( 2, 2 )
 z_index = 3
 texture = ExtResource( 3 )
 
-[node name="TurnQueue" type="Node2D" parent="."]
-position = Vector2( -370.8, 624 )
-z_index = 5
-script = ExtResource( 6 )
+[node name="TurnQueue" parent="." instance=ExtResource( 5 )]
+position = Vector2( -280, 600 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

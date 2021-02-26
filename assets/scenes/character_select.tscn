@@ -17,7 +17,7 @@
 [ext_resource path="res://assets/graphics/character_select/highlight0.png" type="Texture" id=26]
 [ext_resource path="res://assets/graphics/character_select/highlight1.png" type="Texture" id=27]
 
-[sub_resource type="SpriteFrames" id=16]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 26 ), ExtResource( 27 ) ],
 "loop": true,
@@ -237,7 +237,7 @@ __meta__ = {
 modulate = Color( 0.0235294, 0.0941176, 0.14902, 1 )
 position = Vector2( -0.181816, 0 )
 scale = Vector2( 0.999864, 0.999864 )
-frames = SubResource( 16 )
+frames = SubResource( 1 )
 frame = 1
 playing = true
 centered = false
