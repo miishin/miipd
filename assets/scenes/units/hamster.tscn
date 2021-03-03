@@ -25,13 +25,13 @@ animations = [ {
 } ]
 
 [node name="Hamster" instance=ExtResource( 1 )]
+scale = Vector2( 3, 3 )
 z_index = 2
 script = ExtResource( 3 )
 
 [node name="AnimatedSprite" parent="." index="1"]
 position = Vector2( 3.8147e-06, -3.8147e-06 )
-scale = Vector2( 2.28571, 2.28571 )
 frames = SubResource( 4 )
 animation = "idle"
-frame = 3
+frame = 2
 playing = true

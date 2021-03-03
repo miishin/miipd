@@ -109,13 +109,13 @@ animations = [ {
 } ]
 
 [node name="Node2D" instance=ExtResource( 1 )]
+scale = Vector2( 3, 3 )
 z_index = 0
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" parent="." index="1"]
-scale = Vector2( 1.82857, 1.82857 )
 z_index = 5
 frames = SubResource( 19 )
 animation = "idle"
-frame = 4
+frame = 5
 playing = true
