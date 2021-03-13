@@ -14,6 +14,7 @@ func add_unit(unit : Unit):
 	else:
 		unit.position.x = units[-1].position.x + units[-1].get_size().x * 4 + SPACING
 	units.append(unit)
+	update()
 	add_child(unit)
 
 func update():
