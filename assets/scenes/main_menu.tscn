@@ -76,7 +76,7 @@ rect_scale = Vector2( 0.6, 0.6 )
 custom_fonts/normal_font = ExtResource( 2 )
 text = "Cursor: WASD/Arrow Keys
 Select: Space
-Accept: Return"
+Use Ability: Return"
 fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
