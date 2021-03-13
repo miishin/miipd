@@ -36,4 +36,5 @@ script = ExtResource( 2 )
 position = Vector2( 4.54747e-13, -4.54747e-13 )
 frames = SubResource( 5 )
 animation = "idle"
+frame = 1
 playing = true
