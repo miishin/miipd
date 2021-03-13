@@ -74,9 +74,9 @@ margin_right = 1222.0
 margin_bottom = 685.838
 rect_scale = Vector2( 0.6, 0.6 )
 custom_fonts/normal_font = ExtResource( 2 )
-text = "Move Cursor: WASD
-Select:      Space
-Use Ability: Return"
+text = "Cursor: WASD/Arrow Keys
+Select: Space
+Accept: Return"
 fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
